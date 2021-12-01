@@ -69,7 +69,7 @@ public class CartController {
             userService.updateBalanceAfterPayment(id, actualBalance);
             req.getSession().setAttribute("BALANCE", actualBalance);
             cart_list.clear();
-            return "redirect:/shop";
+            return "redirect:/cart";
         } else {
             if (id == null) {
                 return "redirect:/login";
@@ -151,7 +151,7 @@ public class CartController {
     }
 
     @PostMapping("/add-cart")
-    public String addPeriodicalToCart(HttpServletRequest request, @RequestParam("periodicalId") Integer periodicalId) {
+    public String addPeriodicalToCart(HttpServletRequest request, @RequestParam("periodicalId") Integer periodicalId, @RequestParam("page") Integer page) {
         List<Cart> cartList = new ArrayList<>();
 
         Cart cartObject = new Cart();
@@ -167,7 +167,7 @@ public class CartController {
         if (cart_list == null) {
             cartList.add(cartObject);
             request.getSession().setAttribute("cart-list", cartList);
-            return "redirect:/shop";
+            return "redirect:/shop?page="+page;
         } else {
             cartList = cart_list;
             boolean exist = false;
@@ -178,14 +178,14 @@ public class CartController {
             }
             if (!exist) {
                 cartList.add(cartObject);
-                return "redirect:/shop";
+                return "redirect:/shop?page="+page;
             }
         }
-        return "redirect:/shop";
+        return "redirect:/shop?page="+page;
     }
 
     @PostMapping("/buy-now")
-    public String buyNow(@RequestParam("periodicalId") Integer periodicalId, HttpServletRequest request) {
+    public String buyNow(@RequestParam("periodicalId") Integer periodicalId, @RequestParam("page") Integer page, HttpServletRequest request) {
         UserEntity user = (UserEntity) request.getSession().getAttribute("USER");
         if (user == null) {
             return "redirect:/login";
@@ -222,6 +222,6 @@ public class CartController {
         request.getSession().setAttribute("BALANCE", actualBalance);
 
         periodicalHasReceiptService.saveOrder(periodicalHasReceipt);
-        return "redirect:/shop";
+        return "redirect:/shop?page="+page;
     }
 }

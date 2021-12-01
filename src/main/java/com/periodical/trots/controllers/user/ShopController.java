@@ -1,11 +1,18 @@
 package com.periodical.trots.controllers.user;
 
-import com.periodical.trots.entities.*;
-import com.periodical.trots.services.*;
-import org.apache.logging.log4j.LogManager;
+import com.periodical.trots.entities.Cart;
+import com.periodical.trots.entities.PeriodicalHasSubjectEntity;
+import com.periodical.trots.entities.UserEntity;
+import com.periodical.trots.services.PeriodicalHasSubjectService;
+import com.periodical.trots.services.PeriodicalService;
+import com.periodical.trots.services.SubjectService;
+import com.periodical.trots.services.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,29 +37,91 @@ public class ShopController {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    private SubjectService subjectService;
+
+    @Autowired
+    private PeriodicalHasSubjectService periodicalHasSubjectService;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     @GetMapping
     @RequestMapping("/shop")
-    public String shopPage(Model model, HttpServletRequest request) {
+    public String shopPage(Model model, @RequestParam("page") Integer page, HttpServletRequest request) {
         Integer userId = (Integer) request.getSession().getAttribute("ID");
+        String category = (String) request.getSession().getAttribute("category");
+        String order = (String) request.getSession().getAttribute("order");
+        String sort = (String) request.getSession().getAttribute("sort");
+        String searchField = (String) request.getSession().getAttribute("searchField");
+        model.addAttribute("page", page);
+
+        Page<PeriodicalHasSubjectEntity> pageWeb;
+
+        if (category == null || category.equals("all")) {
+            if (searchField == null || searchField.equals("")) {
+                if (sort != null && !sort.equals("ws")) {
+                    pageWeb = periodicalHasSubjectService.findAllWithSort(page, sort, order);
+                } else {
+                    pageWeb = periodicalHasSubjectService.findAll(page);
+                }
+            } else {
+                if (sort != null && !sort.equals("ws")) {
+                    pageWeb = periodicalHasSubjectService.findAllByTitle(page, sort, searchField, order);
+                } else {
+                    pageWeb = periodicalHasSubjectService.findAllByTitle(page, searchField);
+                }
+            }
+        } else {
+            if (searchField == null || searchField.equals("")) {
+                if (sort != null && !sort.equals("ws")) {
+                    pageWeb = periodicalHasSubjectService.findAllWithCategory(page, sort, category, order);
+                } else {
+                    pageWeb = periodicalHasSubjectService.findAllWithCategory(page, category);
+                }
+            } else {
+                if (sort != null && !sort.equals("ws")) {
+                    pageWeb = periodicalHasSubjectService.findAllWithCategoryAndTitle(page, sort, category, searchField, order);
+                } else {
+                    pageWeb = periodicalHasSubjectService.findAllWithCategoryAndTitle(page, category, searchField);
+                }
+            }
+        }
+
+        model.addAttribute("periodicals", pageWeb);
+
+        model.addAttribute("countOfPages", pageWeb.getTotalPages());
+
 
         if (userId != null) {
             UserEntity user = userService.findUserById(userId);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
             BigDecimal balance = user.getBalance();
             Double actualBalance = balance.doubleValue();
+            System.out.println(user.getAuthorities());
+            System.out.println(actualBalance);
             request.getSession().setAttribute("BALANCE", actualBalance);
         }
 
-        model.addAttribute("periodicals", periodicalService.getAllPeriodicals());
+        model.addAttribute("subjects", subjectService.findAll());
+
 
         List<Cart> cartList = (List<Cart>) request.getSession().getAttribute("cart-list");
 
         if (cartList == null) {
             cartList = new ArrayList<>();
-            request.getSession().setAttribute("cart_list", cartList);
-        } else {
-            request.getSession().setAttribute("cart_list", cartList);
         }
+        request.getSession().setAttribute("cart_list", cartList);
 
         return "ShopPage";
+    }
+
+    @PostMapping("/shop")
+    public String postShop(Model model, HttpServletRequest request, @RequestParam(value = "categoryPer") String category, @RequestParam(value = "sort") String sort, @RequestParam(value = "order") String order, @RequestParam(value = "searchField") String searchField, @RequestParam("page") Integer page) {
+        request.getSession().setAttribute("category", category);
+        request.getSession().setAttribute("sort", sort);
+        request.getSession().setAttribute("order", order);
+        request.getSession().setAttribute("searchField", searchField);
+        return "redirect:/shop?page=" + page;
     }
 }

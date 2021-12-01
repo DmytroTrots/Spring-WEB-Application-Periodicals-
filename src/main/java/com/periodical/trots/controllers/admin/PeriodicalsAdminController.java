@@ -45,7 +45,6 @@ public class PeriodicalsAdminController {
 
     @GetMapping("/update-periodical")
     public String updatePeriodicalForAdmin(Model model, @RequestParam("id") Integer id){
-        PeriodicalHasSubjectEntity periodicalHasSubject = new PeriodicalHasSubjectEntity();
         model.addAttribute("publisherList", publisherService.findAll());
         model.addAttribute("subjectList", subjectService.findAll());
         model.addAttribute("periodicalForm", periodicalService.getPeriodicalById(id));
@@ -60,7 +59,56 @@ public class PeriodicalsAdminController {
                                 @RequestParam("file") MultipartFile file,
                                 @RequestParam("periodicalId") Integer periodicalId) {
 
+        PublisherEntity publisherEntity;
+        PeriodicalHasSubjectEntity periodicalHasSubject = new PeriodicalHasSubjectEntity();
+        PeriodicalHasSubjectEntityId periodicalHasSubjectEntityId = new PeriodicalHasSubjectEntityId();
 
+        List<PublisherEntity> publisherEntityList = publisherService.findAll();
+        publisherEntity = publisherEntityList.stream().filter(publisherEntity1 ->
+                publisherName.equals(publisherEntity1.getName())).findAny().orElse(null);
+
+        if (publisherEntity == null) {
+            publisherEntity = new PublisherEntity();
+            publisherEntity.setName(publisherName);
+            publisherEntity.setTelephoneNumber(publisherTelephone);
+            publisherService.save(publisherEntity);
+        }
+        periodicalForm.setPublisher(publisherEntity);
+
+        try {
+            String filename = file.getOriginalFilename();
+            periodicalForm.setImages(filename);
+            File path = new File("C:\\Users\\Dima\\Desktop\\periodicalsSpring\\src\\main\\resources\\static\\images\\" + filename);
+            path.createNewFile();
+            FileOutputStream output = new FileOutputStream(path);
+            output.write(file.getBytes());
+            output.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        periodicalService.updatePeriodical(periodicalId, periodicalForm);
+
+        int subjectId;
+        SubjectEntity subjectEntity;
+        List<SubjectEntity> subjectEntities = subjectService.findAll();
+        for (String s : subjectListFromWeb) {
+            if (!s.equals("")){
+                subjectEntity = subjectEntities.stream().filter(subjectEntity1 ->
+                        s.equals(subjectEntity1.getThemesOfBooks())).findAny().orElse(null);
+                if (subjectEntity == null){
+                    subjectEntity = new SubjectEntity();
+                    subjectEntity.setThemesOfBooks(s);
+                    subjectService.save(subjectEntity);
+                    periodicalHasSubjectEntityId.setPeriodicalId(periodicalId);
+                    periodicalHasSubjectEntityId.setSubjectId(subjectEntity.getId());
+                    periodicalHasSubject.setId(periodicalHasSubjectEntityId);
+                    periodicalHasSubject.setPeriodical(periodicalService.getPeriodicalById(periodicalId));
+                    periodicalHasSubject.setSubject(subjectEntity);
+                    periodicalHasSubjectService.save(periodicalHasSubject);
+                }
+            }
+        }
         return "redirect:/periodicals";
     }
 
@@ -117,12 +165,13 @@ public class PeriodicalsAdminController {
             if (subjectEntity == null){
                 subjectEntity = new SubjectEntity();
                 subjectEntity.setThemesOfBooks(s);
-                subjectId = subjectService.save(subjectEntity);
+                subjectService.save(subjectEntity);
             }
-            subjectId = subjectEntity.getId();
             periodicalHasSubjectEntityId.setPeriodicalId(periodicalId);
-            periodicalHasSubjectEntityId.setSubjectId(subjectId);
+            periodicalHasSubjectEntityId.setSubjectId(subjectEntity.getId());
             periodicalHasSubject.setId(periodicalHasSubjectEntityId);
+            periodicalHasSubject.setPeriodical(periodicalService.getPeriodicalById(periodicalId));
+            periodicalHasSubject.setSubject(subjectEntity);
             periodicalHasSubjectService.save(periodicalHasSubject);
             }
         }

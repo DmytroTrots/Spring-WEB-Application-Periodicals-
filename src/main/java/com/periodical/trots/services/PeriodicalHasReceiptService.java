@@ -13,16 +13,13 @@ public class PeriodicalHasReceiptService {
     @Autowired
     private PeriodicalHasReceiptRepository periodicalHasReceiptRepository;
 
-    public List<PeriodicalHasReceiptEntity> findAllReceipt(){
-        return periodicalHasReceiptRepository.findAll();
-    }
-
     public List<PeriodicalHasReceiptEntity> findAllReceiptOfUser(Integer userId){
         return periodicalHasReceiptRepository.findAllOrdersOfUser(userId);
     }
 
-    public void saveOrder(PeriodicalHasReceiptEntity periodicalHasReceiptEntity){
+    public boolean saveOrder(PeriodicalHasReceiptEntity periodicalHasReceiptEntity){
         periodicalHasReceiptRepository.save(periodicalHasReceiptEntity);
+        return true;
     }
 
 

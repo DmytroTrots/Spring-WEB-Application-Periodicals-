@@ -19,11 +19,12 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public void save(UserEntity user) {
+    public boolean save(UserEntity user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRole("customer");
         user.setBalance(BigDecimal.valueOf(0));
         userRepository.save(user);
+        return true;
     }
 
     @Override
@@ -33,13 +34,14 @@ public class UserServiceImpl implements UserService {
 
     public List<UserEntity> getAll(){ return userRepository.findAll();}
 
-    public void saveUserByAdmin(UserEntity user) {
+    public boolean saveUserByAdmin(UserEntity user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setBalance(BigDecimal.valueOf(0));
         userRepository.save(user);
+        return true;
     }
 
-    public void banUserById(Integer userId){
+    public boolean banUserById(Integer userId){
         UserEntity user = userRepository.getById(userId);
         if (user.getBanStatus() == null){
             user.setBanStatus("banned");
@@ -47,10 +49,12 @@ public class UserServiceImpl implements UserService {
             user.setBanStatus(null);
         }
         userRepository.save(user);
+        return true;
     }
 
-    public void deleteUserById(Integer userId){
+    public boolean deleteUserById(Integer userId){
         userRepository.deleteById(userId);
+        return true;
     }
 
     public Double topUpBalance(Double balance, Double currentBalance, Integer userId){
@@ -61,10 +65,11 @@ public class UserServiceImpl implements UserService {
         return updatedBalance;
     }
 
-    public void updateBalanceAfterPayment(Integer userId, Double actualBalance){
+    public boolean updateBalanceAfterPayment(Integer userId, Double actualBalance){
         UserEntity user = userRepository.getById(userId);
         user.setBalance(BigDecimal.valueOf(actualBalance));
         userRepository.save(user);
+        return true;
     }
 
     public UserEntity findUserById(Integer userId){

@@ -1,7 +1,5 @@
 package com.periodical.trots.entities;
 
-import org.hibernate.validator.constraints.Length;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -17,9 +15,15 @@ public class PublisherEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Length(message = "Value shold be from 11 to 12 symblols, incude Country-code to this value", min = 11, max = 12)
-    @Column(name = "telephone_number", nullable = false, length = 14)
+    @Column(name = "telephone_number", length = 14)
     private String telephoneNumber;
+
+    public PublisherEntity(Integer id) {
+        this.id = id;
+    }
+
+    public PublisherEntity() {
+    }
 
     public String getTelephoneNumber() {
         return telephoneNumber;

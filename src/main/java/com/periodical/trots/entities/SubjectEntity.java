@@ -17,6 +17,13 @@ public class SubjectEntity {
     @OneToMany(mappedBy = "subject")
     Set<PeriodicalHasSubjectEntity> periodicalHasSubject;
 
+    public SubjectEntity(Integer id) {
+        this.id = id;
+    }
+
+    public SubjectEntity() {
+    }
+
     public Set<PeriodicalHasSubjectEntity> getPeriodicalHasSubject() {
         return periodicalHasSubject;
     }

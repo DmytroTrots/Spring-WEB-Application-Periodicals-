@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -19,16 +20,18 @@ public class ReceiptService {
         return receiptRepository.findAll(Sort.by(Sort.Direction.ASC, "status"));
     }
 
-    public void acceptOrderByAdmin(Integer receiptId, StatusEntity status){
+    public boolean acceptOrderByAdmin(Integer receiptId, StatusEntity status){
         ReceiptEntity receipt = receiptRepository.getById(receiptId);
         receipt.setStatus(status);
         receiptRepository.save(receipt);
+        return true;
     }
 
-    public void discardOrderByAdmin(Integer receiptId, StatusEntity status){
+    public boolean discardOrderByAdmin(Integer receiptId, StatusEntity status){
         ReceiptEntity receipt = receiptRepository.getById(receiptId);
         receipt.setStatus(status);
         receiptRepository.save(receipt);
+        return true;
     }
 
     public Integer saveReceipt(ReceiptEntity receipt){
@@ -37,5 +40,9 @@ public class ReceiptService {
 
     public ReceiptEntity getReceiptById(Integer receiptId){
         return receiptRepository.getById(receiptId);
+    }
+
+    public List<ReceiptEntity> getReceiptsForDailyOrder(Date createTime){
+        return receiptRepository.findAllByStatusStatusNameAndCreateTime("accepted", createTime);
     }
 }

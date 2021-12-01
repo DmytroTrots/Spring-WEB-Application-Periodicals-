@@ -1,7 +1,6 @@
 package com.periodical.trots.utils;
 
 import com.periodical.trots.controllers.user.ShopController;
-import com.periodical.trots.entities.Cart;
 import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.services.UserServiceImpl;
 import org.slf4j.Logger;
@@ -12,9 +11,6 @@ import org.springframework.security.authentication.event.AuthenticationSuccessEv
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class LoginSuccessListener implements ApplicationListener<AuthenticationSuccessEvent> {

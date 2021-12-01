@@ -44,8 +44,15 @@ public class ReceiptEntity {
     @Column(name = "create_time")
     private Date createTime;
 
-    @OneToMany(mappedBy = "mReceipt")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "mReceipt")
     Set<PeriodicalHasReceiptEntity> receiptEntities;
+
+    public ReceiptEntity(Integer id) {
+        this.id = id;
+    }
+
+    public ReceiptEntity() {
+    }
 
     public Set<PeriodicalHasReceiptEntity> getReceiptEntities() {
         return receiptEntities;

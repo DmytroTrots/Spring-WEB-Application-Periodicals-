@@ -28,9 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) throw new UsernameNotFoundException(username);
 
         Set<GrantedAuthority> grantedAuthoritySet = new HashSet<>();
-        grantedAuthoritySet.add(new SimpleGrantedAuthority("admin"));
-        grantedAuthoritySet.add(new SimpleGrantedAuthority("customer"));
 
-        return new User(user.getUsername(), user.getPassword(), grantedAuthoritySet);
+        grantedAuthoritySet.add(new SimpleGrantedAuthority(user.getRole()));
+
+        return new User(user.getUsername(), user.getPassword(),grantedAuthoritySet);
     }
 }

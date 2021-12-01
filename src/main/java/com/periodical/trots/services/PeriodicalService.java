@@ -17,8 +17,9 @@ public class PeriodicalService {
         return periodicalRepository.findAll();
     }
 
-    public void deletePeriodical(Integer id){
+    public boolean deletePeriodical(Integer id){
         periodicalRepository.deleteById(id);
+        return true;
     }
 
     public Integer addPeriodical(PeriodicalEntity periodicalEntity){
@@ -27,5 +28,20 @@ public class PeriodicalService {
 
     public PeriodicalEntity getPeriodicalById(Integer id){
         return periodicalRepository.getBySellId(id);
+    }
+
+    public boolean updatePeriodical(Integer periodicalId, PeriodicalEntity periodicalForm) {
+        PeriodicalEntity periodical = periodicalRepository.getBySellId(periodicalId);
+        periodical.setPricePerMonth(periodicalForm.getPricePerMonth());
+        periodical.setPeriodicityPerYear(periodicalForm.getPeriodicityPerYear());
+        periodical.setImages(periodicalForm.getImages());
+        periodical.setPublisher(periodicalForm.getPublisher());
+        periodical.setDescription(periodicalForm.getDescription());
+        periodical.setTitle(periodicalForm.getTitle());
+        periodical.setPercentageOfAdvertising(periodicalForm.getPercentageOfAdvertising());
+        periodical.setNumberOfPages(periodicalForm.getNumberOfPages());
+        periodical.setRating(periodicalForm.getRating());
+        periodicalRepository.save(periodical);
+        return true;
     }
 }

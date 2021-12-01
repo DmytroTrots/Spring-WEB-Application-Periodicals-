@@ -63,11 +63,18 @@ public class PeriodicalEntity {
     @Column(name = "images", nullable = false, length = 500)
     private String images;
 
-    @OneToMany(mappedBy = "periodical")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "periodical")
     Set<PeriodicalHasReceiptEntity> receiptEntities;
 
-    @OneToMany(mappedBy = "periodical")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "periodical")
     Set<PeriodicalHasSubjectEntity> periodicalHasSubject;
+
+    public PeriodicalEntity(Integer sellId) {
+        this.sellId = sellId;
+    }
+
+    public PeriodicalEntity() {
+    }
 
     public Set<PeriodicalHasReceiptEntity> getReceiptEntities() {
         return receiptEntities;
