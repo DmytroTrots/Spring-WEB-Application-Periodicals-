@@ -45,4 +45,5 @@ public class ReceiptService {
     public List<ReceiptEntity> getReceiptsForDailyOrder(Date createTime){
         return receiptRepository.findAllByStatusStatusNameAndCreateTime("accepted", createTime);
     }
+
 }

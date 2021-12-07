@@ -11,7 +11,7 @@ import com.periodical.trots.entities.ReceiptEntity;
 import com.periodical.trots.services.ReceiptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import java.io.FileNotFoundException;
@@ -22,7 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@Component
 public class CreateReportOrder{
 
     public static final String ORDER_REPORT_PDF = "C:\\Users\\Dima\\Desktop\\periodicalsSpring\\src\\main\\resources\\static\\order_report.pdf";

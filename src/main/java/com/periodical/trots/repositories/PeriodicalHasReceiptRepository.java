@@ -10,4 +10,5 @@ import java.util.List;
 public interface PeriodicalHasReceiptRepository extends JpaRepository<PeriodicalHasReceiptEntity, Integer> {
     @Query("select r from PeriodicalHasReceiptEntity r where r.mReceipt.user.id = :userId")
     List<PeriodicalHasReceiptEntity> findAllOrdersOfUser(@Param("userId") Integer userId);
+
 }
