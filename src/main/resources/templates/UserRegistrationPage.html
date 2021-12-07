@@ -11,7 +11,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
     <div class="container">
-        <a class="navbar-brand" href="/shop" th:text="#{label.periodicals}"></a>
+        <a class="navbar-brand" href="/shop?page=0" th:text="#{label.periodicals}"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -38,6 +38,11 @@
 
 <div class="login-form">
     <div class="cotainer">
+        <span style="color:red" th:if="${ex != null}">
+            <div class="alert alert-warning">
+                    <strong th:text="${ex}"></strong>
+            </div>
+        </span>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
@@ -52,6 +57,7 @@
                                     <input type="text" id="username" class="form-control" th:field="*{username}"
                                            pattern="[a-zA-Z0-9]{6,18}"
                                            th:title="#{label.usernameValidate}" required>
+                                    <span class="has-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
                                 </div>
                             </div>
 
@@ -61,7 +67,7 @@
                                 <div class="col-md-6">
                                     <input type="email" id="email" class="form-control" th:field="*{email}"
                                            required>
-                                    <span class="has-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+                                    <span class="has-error" th:if="${#fields.hasErrors('email')}" th:errors="*{username}"></span>
                                 </div>
                             </div>
 
@@ -82,8 +88,9 @@
                                        class="col-md-4 col-form-label text-md-right" th:text="#{label.surname}"></label>
                                 <div class="col-md-6">
                                     <input type="text" id="surname" class="form-control" th:field="*{surname}"
-                                           pattern="[а-яА-ЯёЁa-zA-Z]{1-25}"
+                                           pattern="[а-яА-ЯёЁa-zA-Z]{1,25}"
                                            th:title="#{label.surnameValidate}" required>
+                                    <span class="has-error" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></span>
                                 </div>
                             </div>
 
@@ -91,8 +98,9 @@
                                 <label for="name" class="col-md-4 col-form-label text-md-right" th:text="#{label.name}"></label>
                                 <div class="col-md-6">
                                     <input type="text" id="name" class="form-control" th:field="*{name}"
-                                           pattern="[а-яА-ЯёЁa-zA-Z]{1-25}"
+                                           pattern="[а-яА-ЯёЁa-zA-Z]{1,25}"
                                            th:title="#{label.nameValidate}" required>
+                                    <span class="has-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
                                 </div>
                             </div>
 
@@ -101,8 +109,8 @@
                                        class="col-md-4 col-form-label text-md-right" th:text="#{label.telephone}"></label>
                                 <div class="col-md-6">
                                     <input type="tel" id="telephone" class="form-control" th:field="*{telephone}"
-                                           pattern="[0-9]{11,12}"
                                            th:title="#{label.telephoneValidate}" required>
+                                    <span class="has-error" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"></span>
                                 </div>
                             </div>
 
@@ -111,7 +119,8 @@
                                        class="col-md-4 col-form-label text-md-right" th:text="#{label.address}"></label>
                                 <div class="col-md-6">
                                     <input type="text" id="address" class="form-control" th:field="*{address}"
-                                           required>
+                                           maxlength="1024" required>
+                                    <span class="has-error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
                                 </div>
                             </div>
 

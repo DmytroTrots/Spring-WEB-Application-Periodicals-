@@ -15,7 +15,12 @@
 
 <div th:replace="header :: head"></div>
 
-<div class="container" th:if="${session.cart_list != null && session.cart_list.size()>0}">
+<div class="container">
+    <span style="color:red" th:if="${ex != null}">
+            <div class="alert alert-warning">
+                <strong th:text="${ex}"></strong>
+            </div>
+    </span>
     <div class="d-flex py-3"><h3 th:text="#{label.totalPrice} + (${session.totalPrice==null || session.totalPrice==0}?0:${session.totalPrice})"></h3>
     </div>
     <form th:action="@{/order-all}" method="post">
@@ -50,7 +55,7 @@
             </tbody>
         </table>
 
-        <div class="login-form" th:if="${user != null}">
+        <div class="login-form" th:if="${user != null && (cartPeriodical != null && cartPeriodical.size()!=0)}">
             <div class="cotainer">
                 <div class="row justify-content-center">
                     <div class="col-md-8">

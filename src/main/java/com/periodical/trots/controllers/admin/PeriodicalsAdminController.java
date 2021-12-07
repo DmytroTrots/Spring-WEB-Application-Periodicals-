@@ -6,21 +6,26 @@ import com.periodical.trots.services.PeriodicalService;
 import com.periodical.trots.services.PublisherService;
 import com.periodical.trots.services.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.Part;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class PeriodicalsAdminController {
+
+    public static final String IMAGE_PATH = "C:\\Users\\Dima\\Desktop\\periodicalsSpring\\src\\main\\resources\\static\\images\\";
 
     @Autowired
     private PeriodicalService periodicalService;
@@ -52,12 +57,21 @@ public class PeriodicalsAdminController {
     }
 
     @PostMapping("/update-periodical")
-    public String updatePeriodical(@ModelAttribute("periodicalForm") PeriodicalEntity periodicalForm,
-                                @RequestParam("publisherName") String publisherName,
-                                @RequestParam("publisherTelephone") String publisherTelephone,
-                                @RequestParam("subject") List<String> subjectListFromWeb,
-                                @RequestParam("file") MultipartFile file,
-                                @RequestParam("periodicalId") Integer periodicalId) {
+    public String updatePeriodical(RedirectAttributes redirectAttributes, @Valid @ModelAttribute("periodicalForm") PeriodicalEntity periodicalForm,
+                                   Errors errors,
+                                   @RequestParam("publisherName") String publisherName,
+                                   @RequestParam("publisherTelephone") String publisherTelephone,
+                                   @RequestParam("subject") List<String> subjectListFromWeb,
+                                   @RequestParam("file") MultipartFile file,
+                                   @RequestParam("periodicalId") Integer periodicalId) {
+        if (errors.hasErrors()){
+            langEx(redirectAttributes, "Please, specify correct values", "Будь ласка, вказуйте коректні дані");
+            return "redirect:/update-periodical?id="+periodicalId;
+        }
+        if (periodicalService.getPeriodicalByTitle(periodicalForm.getTitle()) !=null && !periodicalForm.getTitle().equals(periodicalService.getPeriodicalById(periodicalId).getTitle())){
+            langEx(redirectAttributes, "Periodical with such title already exist", "Видання з такою назвою уже існує");
+            return "redirect:/update-periodical?id="+periodicalId;
+        }
 
         PublisherEntity publisherEntity;
         PeriodicalHasSubjectEntity periodicalHasSubject = new PeriodicalHasSubjectEntity();
@@ -78,7 +92,7 @@ public class PeriodicalsAdminController {
         try {
             String filename = file.getOriginalFilename();
             periodicalForm.setImages(filename);
-            File path = new File("C:\\Users\\Dima\\Desktop\\periodicalsSpring\\src\\main\\resources\\static\\images\\" + filename);
+            File path = new File(IMAGE_PATH + filename);
             path.createNewFile();
             FileOutputStream output = new FileOutputStream(path);
             output.write(file.getBytes());
@@ -89,7 +103,6 @@ public class PeriodicalsAdminController {
 
         periodicalService.updatePeriodical(periodicalId, periodicalForm);
 
-        int subjectId;
         SubjectEntity subjectEntity;
         List<SubjectEntity> subjectEntities = subjectService.findAll();
         for (String s : subjectListFromWeb) {
@@ -109,23 +122,32 @@ public class PeriodicalsAdminController {
                 }
             }
         }
+
+        langEx(redirectAttributes, "Periodical was updated", "Видання було оновлено");
+
         return "redirect:/periodicals";
     }
 
 
 
     @PostMapping("/delete-periodical")
-    public String deletePeriodicalById(@RequestParam("periodicalId") Integer id) {
+    public String deletePeriodicalById(RedirectAttributes redirectAttributes, @RequestParam("periodicalId") Integer id) {
         periodicalService.deletePeriodical(id);
+        langEx(redirectAttributes, "Periodical was deleted", "Видання було видалено");
         return "redirect:/periodicals";
     }
 
     @PostMapping("/add-periodical")
-    public String addPeriodical(@ModelAttribute("periodicalForm") PeriodicalEntity periodicalForm,
+    public String addPeriodical(RedirectAttributes redirectAttributes, @Valid @ModelAttribute("periodicalForm") PeriodicalEntity periodicalForm,
+                                Errors errors,
                                 @RequestParam("publisherName") String publisherName,
                                 @RequestParam("publisherTelephone") String publisherTelephone,
                                 @RequestParam("subject") List<String> subjectListFromWeb,
                                 @RequestParam("file") MultipartFile file) {
+        if (errors.hasErrors()){
+            langEx(redirectAttributes, "Please, specify correct values", "Будь ласка, вказуйте коректні дані");
+            return "redirect:/periodicals";
+        }
         PublisherEntity publisherEntity;
         PeriodicalHasSubjectEntity periodicalHasSubject = new PeriodicalHasSubjectEntity();
         PeriodicalHasSubjectEntityId periodicalHasSubjectEntityId = new PeriodicalHasSubjectEntityId();
@@ -155,7 +177,6 @@ public class PeriodicalsAdminController {
         }
 
         int periodicalId = periodicalService.addPeriodical(periodicalForm);
-        int subjectId;
         SubjectEntity subjectEntity;
         List<SubjectEntity> subjectEntities = subjectService.findAll();
         for (String s : subjectListFromWeb) {
@@ -176,7 +197,18 @@ public class PeriodicalsAdminController {
             }
         }
 
+        langEx(redirectAttributes, "Periodical was added", "Видання було додано");
+
         return "redirect:/periodicals";
+    }
+
+    private void langEx(RedirectAttributes redirectAttributes, String s, String s2) {
+        String lang = String.valueOf(LocaleContextHolder.getLocale());
+        if (lang.equals("en_US") || lang.equals("en")) {
+            redirectAttributes.addFlashAttribute("ex", s);
+        } else {
+            redirectAttributes.addFlashAttribute("ex", s2);
+        }
     }
 
 }

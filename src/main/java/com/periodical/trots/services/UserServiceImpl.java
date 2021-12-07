@@ -76,5 +76,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.getById(userId);
     }
 
+    public UserEntity findUserByEmail(String email){return userRepository.findByEmail(email);}
+
+    public UserEntity findUserByTelephone(String telephone){return userRepository.findByTelephone(telephone);}
+
 
 }

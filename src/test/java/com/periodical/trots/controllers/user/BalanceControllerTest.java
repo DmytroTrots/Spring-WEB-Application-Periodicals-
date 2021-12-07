@@ -3,7 +3,6 @@ package com.periodical.trots.controllers.user;
 import com.periodical.trots.WebSecurityConfig;
 import com.periodical.trots.services.SecurityService;
 import com.periodical.trots.services.UserService;
-import com.periodical.trots.web.UserValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,9 +31,6 @@ class BalanceControllerTest {
 
     @MockBean
     private SecurityService securityService;
-
-    @MockBean
-    private UserValidator userValidator;
 
     @Qualifier("userDetailsServiceImpl")
     @MockBean

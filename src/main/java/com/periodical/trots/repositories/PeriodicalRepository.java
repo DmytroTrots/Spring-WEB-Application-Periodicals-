@@ -25,4 +25,6 @@ public interface PeriodicalRepository  extends JpaRepository<PeriodicalEntity, I
     @Query("select p from PeriodicalEntity p group by p.sellId")
     Page<PeriodicalEntity> findAllGroupBySellId(Pageable pageable);
 
+    PeriodicalEntity getByTitle(String title);
+
 }

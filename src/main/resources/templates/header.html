@@ -15,8 +15,7 @@
 
                         <li class="nav-item" role="presentation" th:if="${session.ROLE} == null"><a class="nav-link"
                                                                                                     href="/cart"
-                                                                                                    th:text="#{label.cart}+'  '+(${session.cart_list.size()}==0?'':${session.cart_list.size()})"><span
-                                class="badge badge-danger"></span></a>
+                                                                                                    th:text="#{label.cart}"></a>
                         </li>
 
                         <li class="nav-item" role="presentation" th:if="${session.ROLE} == 'customer'"><a
@@ -26,8 +25,7 @@
                                 class="nav-link" href="/profile" th:text="#{label.profile}"></a></li>
                         <li class="nav-item" role="presentation" th:if="${session.ROLE} == 'customer'"><a
                                 class="nav-link" href="/cart"
-                                th:text="#{label.cart}+' '+(${session.cart_list.size()}==0?'':${session.cart_list.size()})"><span
-                                class="badge badge-danger"></span></a>
+                                th:text="#{label.cart}+' '+(${session.cart_list.size()}==0?'':${session.cart_list.size()})"></a>
                         </li>
                         <li class="nav-item" role="presentation" th:if="${session.ROLE} == 'customer'"><a
                                 class="nav-link"
@@ -60,12 +58,18 @@
                         <input class="login" type="submit" th:value="#{label.logOut}"/>
                     </form>
                     <ul th:if="${#request.getRequestURI()=='/shop'}">
-                        <li><a th:href="@{'/shop?page='+${page}+'&amp;lang=en'}"><img width="30px" th:src="@{/images/img_1.png}"></a></li>
-                        <li><a th:href="@{'/shop?page='+${page}+'&amp;lang=ua'}"><img width="30px" th:src="@{/images/img.png}"></a></li>
+                        <li><a th:href="@{'/shop?page='+${page}+'&amp;lang=en'}"><img width="30px"
+                                                                                      th:src="@{/images/img_1.png}"></a>
+                        </li>
+                        <li><a th:href="@{'/shop?page='+${page}+'&amp;lang=ua'}"><img width="30px"
+                                                                                      th:src="@{/images/img.png}"></a>
+                        </li>
                     </ul>
                     <ul th:if="${#request.getRequestURI()=='/update-periodical'}">
-                        <li><a th:href="@{'/update-periodical?id='+${periodicalForm.sellId}+'&amp;lang=en'}"><img width="30px" th:src="@{/images/img_1.png}"></a></li>
-                        <li><a th:href="@{'/update-periodical?id='+${periodicalForm.sellId}+'&amp;lang=ua'}"><img width="30px" th:src="@{/images/img.png}"></a></li>
+                        <li><a th:href="@{'/update-periodical?id='+${periodicalForm.sellId}+'&amp;lang=en'}"><img
+                                width="30px" th:src="@{/images/img_1.png}"></a></li>
+                        <li><a th:href="@{'/update-periodical?id='+${periodicalForm.sellId}+'&amp;lang=ua'}"><img
+                                width="30px" th:src="@{/images/img.png}"></a></li>
                     </ul>
                     <ul th:if="${#request.getRequestURI()!='/update-periodical' && #request.getRequestURI()!='/shop'}">
                         <li><a href="?lang=en"><img width="30px" th:src="@{/images/img_1.png}"></a></li>

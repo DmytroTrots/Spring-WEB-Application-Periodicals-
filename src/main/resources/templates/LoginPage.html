@@ -12,7 +12,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
     <div class="container">
-        <a class="navbar-brand" href="/shop" th:text="#{label.periodicals}"></a>
+        <a class="navbar-brand" href="/shop?page=0" th:text="#{label.periodicals}"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -37,8 +37,15 @@
     </div>
 </nav>
 
+
+
 <div class="login-form">
     <div class="cotainer">
+        <span style="color:red" th:if="${ex != null}">
+            <div class="alert alert-warning">
+                    <strong th:text="${ex}"></strong>
+            </div>
+        </span>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
@@ -47,7 +54,8 @@
                         <form th:action="@{/login}" method="post">
                             <div class="form-group row">
                                 <label for="username"
-                                       class="col-md-4 col-form-label text-md-right" th:text="#{label.username}"></label>
+                                       class="col-md-4 col-form-label text-md-right"
+                                       th:text="#{label.username}"></label>
                                 <div class="col-md-6">
                                     <input type="text" id="username" class="form-control" name="username"
                                            required autofocus>
@@ -55,7 +63,8 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right" th:text="#{label.password}"></label>
+                                <label for="password" class="col-md-4 col-form-label text-md-right"
+                                       th:text="#{label.password}"></label>
                                 <div class="col-md-6">
                                     <input type="password" id="password" class="form-control" name="password"
                                            required>

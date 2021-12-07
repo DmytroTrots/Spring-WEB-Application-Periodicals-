@@ -30,7 +30,7 @@ public class CreateReportOrder{
     @Autowired
     private ReceiptService receiptService;
 
-    @Scheduled(cron = "59 21 * * * *", zone = "UTC")
+    @Scheduled(cron = "00 59 21 * * *", zone = "UTC")
     public void run() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now();

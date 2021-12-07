@@ -13,6 +13,11 @@
 <div th:replace="header :: head"></div>
 
 <div align="center">
+    <span style="color:red" th:if="${ex != null}">
+            <div class="alert alert-warning">
+                <strong th:text="${ex}"></strong>
+            </div>
+    </span>
     <h1 th:text="#{label.topUpBalance}"></h1>
     <form th:action="@{/top-up}" method="post">
         <input type="number" name="balance" min="1"/>

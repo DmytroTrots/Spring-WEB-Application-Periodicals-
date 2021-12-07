@@ -35,6 +35,11 @@
 </div>
 
 <div class="container">
+    <span style="color:red" th:if="${ex != null}">
+            <div class="alert alert-warning">
+                <strong th:text="${ex}"></strong>
+            </div>
+    </span>
     <div class="card-header my-3" th:text="#{label.periodicals}"></div>
     <div class="row">
         <div class="col-md-3 my-3" th:each="periodical,iter : ${periodicals}">

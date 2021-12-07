@@ -12,6 +12,12 @@
 
 <div th:replace="header :: head"></div>
 
+<span style="color:red" th:if="${ex != null}">
+            <div class="alert alert-warning">
+                <strong th:text="${ex}"></strong>
+            </div>
+    </span>
+
 <form class="send-message" th:action="@{/send-message}" method="post">
     <input type="hidden" name="to" value="headerperiodicalsiteepam@gmail.com"/><br/>
     <input type="hidden" name="subject" th:value="${'Username -> ' + session.USER.username +', ID -> '+ session.USER.id}"><br/>

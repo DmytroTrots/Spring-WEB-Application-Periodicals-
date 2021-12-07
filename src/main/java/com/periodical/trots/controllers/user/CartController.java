@@ -3,11 +3,13 @@ package com.periodical.trots.controllers.user;
 import com.periodical.trots.entities.*;
 import com.periodical.trots.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -34,11 +36,14 @@ public class CartController {
     private UserServiceImpl userService;
 
     @PostMapping("/order-all")
-    public String orderAllFromCart(HttpServletRequest req, @RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("email") String email, @RequestParam("telephone") String telephone, @RequestParam("address") String address) {
+    public String orderAllFromCart(RedirectAttributes redirectAttributes, HttpServletRequest req, @RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("email") String email, @RequestParam("telephone") String telephone, @RequestParam("address") String address) {
         Integer id = (Integer) req.getSession().getAttribute("ID");
         Double actualBalance = (Double) req.getSession().getAttribute("BALANCE");
         Double totalPrice = (Double) req.getSession().getAttribute("totalPrice");
         List<Cart> cart_list = (List<Cart>) req.getSession().getAttribute("cart-list");
+        String lang = String.valueOf(LocaleContextHolder.getLocale());
+        langEx(redirectAttributes, lang, "All periodicals were ordered","Всі видання були замовлені");
+
         if (cart_list != null && id != null && actualBalance > totalPrice) {
             UserEntity user = (UserEntity) req.getSession().getAttribute("USER");
             ReceiptEntity receiptEntity = new ReceiptEntity();
@@ -105,15 +110,16 @@ public class CartController {
         if (action != null && id >= 1) {
             if (action.equals("inc")) {
                 for (Cart c : cart_list) {
-                    if (c.getPeriodical().getSellId() == id) {
+                    if (c.getPeriodical().getSellId() == id && c.getMonths() <12) {
                         int month = c.getMonths();
                         month++;
                         c.setMonths(month);
                         BigDecimal price = c.getPeriodical().getPricePerMonth();
                         c.setTotalPrice(price.doubleValue() * c.getMonths());
-                        return "redirect:/cart";
+                        break;
                     }
                 }
+                return "redirect:/cart";
             }
             if (action.equals("dec")) {
                 for (Cart c : cart_list) {
@@ -151,8 +157,11 @@ public class CartController {
     }
 
     @PostMapping("/add-cart")
-    public String addPeriodicalToCart(HttpServletRequest request, @RequestParam("periodicalId") Integer periodicalId, @RequestParam("page") Integer page) {
+    public String addPeriodicalToCart(RedirectAttributes redirectAttributes, HttpServletRequest request, @RequestParam("periodicalId") Integer periodicalId, @RequestParam("page") Integer page) {
         List<Cart> cartList = new ArrayList<>();
+
+        String lang = String.valueOf(LocaleContextHolder.getLocale());
+        langEx(redirectAttributes, lang, "Periodical was added to cart","Видання додано до корзини");
 
         Cart cartObject = new Cart();
         PeriodicalEntity periodical = periodicalService.getPeriodicalById(periodicalId);
@@ -185,11 +194,12 @@ public class CartController {
     }
 
     @PostMapping("/buy-now")
-    public String buyNow(@RequestParam("periodicalId") Integer periodicalId, @RequestParam("page") Integer page, HttpServletRequest request) {
+    public String buyNow(RedirectAttributes redirectAttributes, @RequestParam("periodicalId") Integer periodicalId, @RequestParam("page") Integer page, HttpServletRequest request) {
         UserEntity user = (UserEntity) request.getSession().getAttribute("USER");
-        if (user == null) {
-            return "redirect:/login";
-        }
+
+        String lang = String.valueOf(LocaleContextHolder.getLocale());
+        langEx(redirectAttributes, lang, "Periodical was ordered","Видання було замовлено");
+
         ReceiptEntity receiptEntity = new ReceiptEntity();
         StatusEntity status = statusService.getStatusById(1);
         receiptEntity.setStatus(status);
@@ -218,10 +228,18 @@ public class CartController {
         Double totalPrice = pricePerMonth.doubleValue();
         Double actualBalance = (Double) request.getSession().getAttribute("BALANCE");
         actualBalance = actualBalance - totalPrice;
-        userService.updateBalanceAfterPayment(periodicalId, actualBalance);
+        userService.updateBalanceAfterPayment(user.getId(), actualBalance);
         request.getSession().setAttribute("BALANCE", actualBalance);
 
         periodicalHasReceiptService.saveOrder(periodicalHasReceipt);
         return "redirect:/shop?page="+page;
+    }
+
+    private void langEx(RedirectAttributes redirectAttributes, String lang, String s, String s2) {
+        if (lang.equals("en_US") || lang.equals("en")) {
+            redirectAttributes.addFlashAttribute("ex", s);
+        } else {
+            redirectAttributes.addFlashAttribute("ex", s2);
+        }
     }
 }

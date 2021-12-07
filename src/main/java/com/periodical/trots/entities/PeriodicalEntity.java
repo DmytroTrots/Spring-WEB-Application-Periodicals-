@@ -15,43 +15,41 @@ public class PeriodicalEntity {
     @Column(name = "sell_id", nullable = false)
     private Integer sellId;
 
-    @Length(message = "Value should be from 4 to 45 symbols", min = 4, max = 45)
-    @NotBlank(message = "Specify this field correct")
     @Column(name = "title", nullable = false, unique = true, length = 125)
+    @Pattern(regexp = "[A-Za-z0-9_ ]{2,64}", message = "{error.title}")
     private String title;
 
-    @NotNull(message = "Specify this field")
-    @Positive(message = "Value should be positive")
-    @Min(message = "Value should be more than 1", value = 1)
+    @NotNull(message = "{error.numberOfPages}")
+    @Positive(message = "{error.numberOfPages}")
+    @Min(message = "{error.numberOfPages}", value = 1)
+    @Max(value = 1000, message = "{error.numberOfPages}")
     @Column(name = "number_of_pages", nullable = false)
     private Integer numberOfPages;
 
-    @NotNull(message = "Specify this field")
-    @Positive(message = "Value should be positive")
-    @Min(message = "Value should be more than 1", value = 1)
     @Column(name = "periodicity_per_year", nullable = false)
     private Integer periodicityPerYear;
 
-    @NotNull(message = "Specify this field")
-    @Positive(message = "Value should be positive")
-    @Min(message = "Value should be more than 0", value = 0)
+    @NotNull(message = "{error.percentageOfAdvertising}")
+    @Positive(message = "{error.percentageOfAdvertising}")
+    @Min(message = "{error.percentageOfAdvertising}", value = 0)
+    @Max(value = 100, message = "{error.percentageOfAdvertising}")
     @Column(name = "percentage_of_advertising", nullable = false)
     private Integer percentageOfAdvertising;
 
-    @NotNull(message = "Specify this field")
-    @Positive(message = "Value should be positive")
-    @Min(message = "Value should be more than 1", value = 1)
+    @NotNull(message = "{error.pricePerMonth}")
+    @Positive(message = "{error.pricePerMonth}")
+    @Min(message = "{error.pricePerMonth}", value = 1)
     @Column(name = "price_per_month", nullable = false)
     private BigDecimal pricePerMonth;
 
-    @Length(message = "Description should be from 5 to 1000 symbols", min = 5, max = 1000)
-    @NotBlank(message = "Specify this field")
+    @Length(message = "{error.description}", min = 5, max = 1000)
+    @NotBlank(message = "{error.description}")
     @Column(name = "description", nullable = false)
     private String description;
 
-    @NotNull(message = "Specify this field")
-    @Max(message = "Value should be less than 5", value = 5)
-    @Min(message = "Value should be more than 0", value = 0)
+    @NotNull(message = "{error.rating}")
+    @Max(message = "{error.rating}", value = 5)
+    @Min(message = "{error.rating}", value = 0)
     @Column(name = "rating")
     private Double rating;
 
@@ -59,7 +57,6 @@ public class PeriodicalEntity {
     @JoinColumn(name = "publisher_id", nullable = false)
     private PublisherEntity publisher;
 
-    @NotNull(message = "Select any image")
     @Column(name = "images", nullable = false, length = 500)
     private String images;
 

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -95,11 +94,8 @@ public class ShopController {
 
         if (userId != null) {
             UserEntity user = userService.findUserById(userId);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
             BigDecimal balance = user.getBalance();
             Double actualBalance = balance.doubleValue();
-            System.out.println(user.getAuthorities());
-            System.out.println(actualBalance);
             request.getSession().setAttribute("BALANCE", actualBalance);
         }
 
@@ -124,4 +120,5 @@ public class ShopController {
         request.getSession().setAttribute("searchField", searchField);
         return "redirect:/shop?page=" + page;
     }
+
 }

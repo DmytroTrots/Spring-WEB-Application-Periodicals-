@@ -1,24 +1,23 @@
 package com.periodical.trots.controllers.admin;
 
-import com.periodical.trots.entities.PeriodicalEntity;
 import com.periodical.trots.entities.PeriodicalHasReceiptEntity;
 import com.periodical.trots.entities.ReceiptEntity;
-import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.services.PeriodicalHasReceiptService;
 import com.periodical.trots.services.ReceiptService;
 import com.periodical.trots.services.StatusService;
 import com.periodical.trots.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class OrdersAdminController {
@@ -58,13 +57,14 @@ public class OrdersAdminController {
     }
 
     @PostMapping("/accept-order")
-    public String acceptOrderByAdmin(@RequestParam("receiptId") Integer receiptId) {
+    public String acceptOrderByAdmin(RedirectAttributes redirectAttributes, @RequestParam("receiptId") Integer receiptId) {
         receiptService.acceptOrderByAdmin(receiptId, statusService.getStatusById(3));
+        langEx(redirectAttributes, "Order was discarded", "Замовлення було відхилено");
         return "redirect:/orders";
     }
 
     @PostMapping("/discard-order")
-    public String discardOrderByAdmin(@RequestParam("receiptId") Integer receiptId) {
+    public String discardOrderByAdmin(RedirectAttributes redirectAttributes, @RequestParam("receiptId") Integer receiptId) {
         ReceiptEntity receipt = receiptService.getReceiptById(receiptId);
         BigDecimal balanceOfUser = receipt.getUser().getBalance();
         Double actualBalance = balanceOfUser.doubleValue();
@@ -79,6 +79,17 @@ public class OrdersAdminController {
         userService.updateBalanceAfterPayment(receipt.getUser().getId(), actualBalance);
 
         receiptService.discardOrderByAdmin(receiptId, statusService.getStatusById(2));
+
+        langEx(redirectAttributes, "Order was discarded", "Замовлення було відхилено");
         return "redirect:/orders";
+    }
+
+    private void langEx(RedirectAttributes redirectAttributes, String s, String s2) {
+        String lang = String.valueOf(LocaleContextHolder.getLocale());
+        if (lang.equals("en_US") || lang.equals("en")) {
+            redirectAttributes.addFlashAttribute("ex", s);
+        } else {
+            redirectAttributes.addFlashAttribute("ex", s2);
+        }
     }
 }

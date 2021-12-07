@@ -44,4 +44,8 @@ public class PeriodicalService {
         periodicalRepository.save(periodical);
         return true;
     }
+
+    public PeriodicalEntity getPeriodicalByTitle(String title){
+        return periodicalRepository.getByTitle(title);
+    }
 }

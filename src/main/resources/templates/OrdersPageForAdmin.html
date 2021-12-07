@@ -9,6 +9,11 @@
 <body>
 
 <div th:replace="header :: head"></div>
+<span style="color:red" th:if="${ex != null}">
+            <div class="alert alert-warning">
+                    <strong th:text="${ex}"></strong>
+            </div>
+        </span>
 <h3 th:text="#{label.orders}"></h3>
 <table class="table">
     <thead class="bg-light">
@@ -28,33 +33,33 @@
     </tr>
     </thead>
     <tbody>
-        <tr th:each="receipts,iter : ${receipt}">
-            <td th:text="${receipts.id}"></td>
-            <td th:text="${receipts.user.id}"></td>
-            <td th:text="${receipts.user.name}"></td>
-            <td th:text="${receipts.user.surname}"></td>
-            <td th:text="${receipts.user.email}"></td>
-            <td th:text="${receipts.user.telephone}"></td>
-            <td th:text="${receipts.user.address}"></td>
-            <td>
+    <tr th:each="receipts,iter : ${receipt}">
+        <td th:text="${receipts.id}"></td>
+        <td th:text="${receipts.user.id}"></td>
+        <td th:text="${receipts.user.name}"></td>
+        <td th:text="${receipts.user.surname}"></td>
+        <td th:text="${receipts.user.email}"></td>
+        <td th:text="${receipts.user.telephone}"></td>
+        <td th:text="${receipts.user.address}"></td>
+        <td>
                 <span th:each="periodical,iter2 : ${receipts.receiptEntities}">
                     <span th:if="${!iter2.last}" th:text="${periodical.id.periodicalSellId} + ','"></span>
                     <span th:if="${iter2.last}" th:text="${periodical.id.periodicalSellId}"></span>
                 </span>
-            </td>
-            <td th:text="${prices[iter.index]}"></td>
-            <td th:text="${#dates.format(receipts.getCreateTime(), 'dd-MM-yyyy')}"></td>
-            <td th:text="${receipts.status.statusName}"></td>
-                <form th:action="@{/accept-order}" method="post" th:if="${receipts.status.statusName == 'payed'}">
-                    <td><input type="hidden" name="receiptId" th:value="${receipts.id}">
-                        <input type="submit" th:value="#{label.accept}">
-                </form>
-                <form th:action="@{/discard-order}" method="post" th:if="${receipts.status.statusName == 'payed'}">
-                    <input type="hidden" name="receiptId" th:value="${receipts.id}">
-                    <input type="hidden" name="userId" th:value="${receipts.user.id}">
-                    <input type="submit" th:value="#{label.discard}"></td>
-                </form>
-        </tr>
+        </td>
+        <td th:text="${prices[iter.index]}"></td>
+        <td th:text="${#dates.format(receipts.getCreateTime(), 'dd-MM-yyyy')}"></td>
+        <td th:text="${receipts.status.statusName}"></td>
+        <form th:action="@{/accept-order}" method="post" th:if="${receipts.status.statusName == 'payed'}">
+            <td><input type="hidden" name="receiptId" th:value="${receipts.id}">
+                <input type="submit" th:value="#{label.accept}">
+        </form>
+        <form th:action="@{/discard-order}" method="post" th:if="${receipts.status.statusName == 'payed'}">
+            <input type="hidden" name="receiptId" th:value="${receipts.id}">
+            <input type="hidden" name="userId" th:value="${receipts.user.id}">
+            <input type="submit" th:value="#{label.discard}"></td>
+        </form>
+    </tr>
     </tbody>
 </table>
 </body>
