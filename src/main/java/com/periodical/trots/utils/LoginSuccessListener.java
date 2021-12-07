@@ -11,6 +11,7 @@ import org.springframework.security.authentication.event.AuthenticationSuccessEv
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.DecimalFormat;
 
 @Component
 public class LoginSuccessListener implements ApplicationListener<AuthenticationSuccessEvent> {
@@ -27,6 +28,8 @@ public class LoginSuccessListener implements ApplicationListener<AuthenticationS
     public void onApplicationEvent(AuthenticationSuccessEvent evt) {
         String currentUserName = evt.getAuthentication().getName();
         UserEntity user = userService.findByUsername(currentUserName);
+        DecimalFormat dcf = new DecimalFormat("#.##");
+        request.getSession().setAttribute("decimalFormat", dcf);
         request.getSession().setAttribute("ROLE", user.getRole());
         request.getSession().setAttribute("ID", user.getId());
         request.getSession().setAttribute("USER", user);

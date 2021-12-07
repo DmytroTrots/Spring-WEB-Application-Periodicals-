@@ -21,7 +21,7 @@
                 <strong th:text="${ex}"></strong>
             </div>
     </span>
-    <div class="d-flex py-3"><h3 th:text="#{label.totalPrice} + (${session.totalPrice==null || session.totalPrice==0}?0:${session.totalPrice})"></h3>
+    <div class="d-flex py-3"><h3 th:text="#{label.totalPrice} + (${session.totalPrice==null || session.totalPrice==0}?0:${session.decimalFormat.format(session.totalPrice)})"></h3>
     </div>
     <form th:action="@{/order-all}" method="post">
         <table class="table table-loght">
@@ -30,7 +30,7 @@
                 <th scope="col" th:text="#{label.title}"></th>
                 <th scope="col" th:text="#{label.publisher}"></th>
                 <th scope="col" th:text="#{label.priceOnly}"></th>
-                <th scope="col" th:text="#{label.numberOfMonths}"></th>
+                <th scope="col" th:text="#{label.numberOfPeriodicals}"></th>
                 <th scope="col" th:text="#{label.cancel}"></th>
             </tr>
             </thead>
@@ -38,7 +38,7 @@
                    th:each="list : ${cartPeriodical}">
             <td th:text="${list.periodical.title}"></td>
             <td th:text="${list.periodical.publisher.name}"></td>
-            <td th:text="${list.totalPrice}"></td>
+            <td th:text="${session.decimalFormat.format(list.totalPrice)}"></td>
             <td>
                 <input type="hidden" name="periodicalId" th:value="${list.periodical.sellId}" class="form-input">
                 <div class="form-group d-flex justify-content-between w-50">
@@ -60,7 +60,7 @@
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <div class="card">
-                            <div class="card-header" th:text="#{label.addUser}"></div>
+                            <div class="card-header" th:text="#{label.users}"></div>
                             <div class="card-body">
                                 <div class="form-group row">
                                     <label for="email"
@@ -80,7 +80,7 @@
                                     <div class="col-md-6">
                                         <input type="text" id="surname" class="form-control" name="surname"
                                                th:value="${user.surname}"
-                                               pattern="[а-яА-ЯёЁa-zA-Z]{1-25}"
+                                               pattern="[а-яА-ЯёЁa-zA-Z]{1,25}"
                                                th:title="#{label.surnameValidate}" required>
                                     </div>
                                 </div>
@@ -91,7 +91,7 @@
                                     <div class="col-md-6">
                                         <input type="text" id="name" class="form-control" name="name"
                                                th:value="${user.name}"
-                                               pattern="[а-яА-ЯёЁa-zA-Z]{1-25}"
+                                               pattern="[а-яА-ЯёЁa-zA-Z]{1,25}"
                                                th:title="#{label.nameValidate}" required>
                                     </div>
                                 </div>
@@ -114,11 +114,10 @@
                                            th:text="#{label.address}"></label>
                                     <div class="col-md-6">
                                         <input type="text" id="address" class="form-control" name="address"
-                                               th:value="${user.address}"
+                                               maxlength="1024" th:value="${user.address}"
                                                required>
                                     </div>
                                 </div>
-
 
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary" th:text="#{label.submit}"></button>

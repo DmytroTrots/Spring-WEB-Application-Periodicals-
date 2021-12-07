@@ -76,7 +76,7 @@ public class OrdersAdminController {
             priceFinal = priceFinal +priceStart.doubleValue()*r.getNumberOfMonth();
         }
         actualBalance = actualBalance + priceFinal;
-        userService.updateBalanceAfterPayment(receipt.getUser().getId(), actualBalance);
+        userService.updateBalanceAfterPayment(receipt.getUser().getUsername(), actualBalance);
 
         receiptService.discardOrderByAdmin(receiptId, statusService.getStatusById(2));
 

@@ -15,6 +15,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -65,8 +66,8 @@ public class UserServiceImpl implements UserService {
         return updatedBalance;
     }
 
-    public boolean updateBalanceAfterPayment(Integer userId, Double actualBalance){
-        UserEntity user = userRepository.getById(userId);
+    public boolean updateBalanceAfterPayment(String username, Double actualBalance){
+        UserEntity user = userRepository.findByUsername(username);
         user.setBalance(BigDecimal.valueOf(actualBalance));
         userRepository.save(user);
         return true;

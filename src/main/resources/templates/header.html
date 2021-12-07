@@ -34,7 +34,7 @@
 
                         <a class="btn btn-light action-button" role="button"
                            href="/top-up" th:if="${session.ROLE} == 'customer'"
-                           th:text="#{label.balanceAcc} + (${session.BALANCE}>0?${session.BALANCE}:0)"> </a>
+                           th:text="#{label.balanceAcc} + (${session.BALANCE}>0?${session.decimalFormat.format(session.BALANCE)}:0)"> </a>
 
                         <li class="nav-item" role="presentation" th:if="${session.ROLE} == 'admin'"><a class="nav-link"
                                                                                                        href="/periodicals"

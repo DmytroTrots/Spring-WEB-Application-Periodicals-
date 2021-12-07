@@ -117,7 +117,7 @@ class UserServiceImplTest {
 
         Mockito.doReturn(new UserEntity()).when(userRepository).getById(1);
 
-        boolean isUpdated = userService.updateBalanceAfterPayment(user.getId(), 400.0);
+        boolean isUpdated = userService.updateBalanceAfterPayment(user.getUsername(), 400.0);
 
         Assert.assertTrue(isUpdated);
     }

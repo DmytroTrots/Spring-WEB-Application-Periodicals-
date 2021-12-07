@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +70,7 @@ public class CartController {
                 periodicalHasReceiptService.saveOrder(periodicalHasReceipt);
             }
             actualBalance = actualBalance - totalPrice;
-            userService.updateBalanceAfterPayment(id, actualBalance);
+            userService.updateBalanceAfterPayment(user.getUsername(), actualBalance);
             req.getSession().setAttribute("BALANCE", actualBalance);
             cart_list.clear();
             return "redirect:/cart";
@@ -85,8 +84,6 @@ public class CartController {
 
     @GetMapping("/cart")
     public String cartGetMethod(HttpServletRequest request, Model model) {
-        DecimalFormat dcf = new DecimalFormat("#.##");
-        request.getSession().setAttribute("decimalFormat", dcf);
         List<Cart> cart_list = (List<Cart>) request.getSession().getAttribute("cart-list");
         UserEntity user = (UserEntity) request.getSession().getAttribute("USER");
         double totalPrice = 0;
@@ -183,6 +180,8 @@ public class CartController {
             for (Cart c : cartList) {
                 if (c.getPeriodical().getSellId() == periodicalId) {
                     exist = true;
+                    langEx(redirectAttributes, lang, "Periodical already in cart","Видання уже в корзині");
+                    return "redirect:/shop?page="+page;
                 }
             }
             if (!exist) {
@@ -228,7 +227,7 @@ public class CartController {
         Double totalPrice = pricePerMonth.doubleValue();
         Double actualBalance = (Double) request.getSession().getAttribute("BALANCE");
         actualBalance = actualBalance - totalPrice;
-        userService.updateBalanceAfterPayment(user.getId(), actualBalance);
+        userService.updateBalanceAfterPayment(user.getUsername(), actualBalance);
         request.getSession().setAttribute("BALANCE", actualBalance);
 
         periodicalHasReceiptService.saveOrder(periodicalHasReceipt);

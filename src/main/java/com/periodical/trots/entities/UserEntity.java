@@ -30,7 +30,6 @@ public class UserEntity implements UserDetails{
     private String email;
 
     @Column(name = "password", nullable = false, length = 1000)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$", message = "{error.password}")
     private String password;
 
     @CreationTimestamp
