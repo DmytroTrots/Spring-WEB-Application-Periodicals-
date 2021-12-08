@@ -9,6 +9,8 @@ import com.itextpdf.layout.element.Table;
 import com.periodical.trots.entities.PeriodicalHasReceiptEntity;
 import com.periodical.trots.entities.ReceiptEntity;
 import com.periodical.trots.services.ReceiptService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,8 @@ import java.util.List;
 public class CreateReportOrder{
 
     public static final String ORDER_REPORT_PDF = "C:\\Users\\Dima\\Desktop\\periodicalsSpring\\src\\main\\resources\\static\\order_report.pdf";
+
+    private static final Logger logger = LoggerFactory.getLogger(LoginSuccessListener.class);
 
     @Autowired
     private ReceiptService receiptService;

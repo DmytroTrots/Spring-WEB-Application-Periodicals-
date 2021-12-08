@@ -4,14 +4,12 @@ import com.periodical.trots.entities.Cart;
 import com.periodical.trots.entities.PeriodicalHasSubjectEntity;
 import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.services.PeriodicalHasSubjectService;
-import com.periodical.trots.services.PeriodicalService;
 import com.periodical.trots.services.SubjectService;
 import com.periodical.trots.services.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,9 +29,6 @@ public class ShopController {
     private static final Logger logger = LoggerFactory.getLogger(ShopController.class);
 
     @Autowired
-    private PeriodicalService periodicalService;
-
-    @Autowired
     private UserServiceImpl userService;
 
     @Autowired
@@ -41,9 +36,6 @@ public class ShopController {
 
     @Autowired
     private PeriodicalHasSubjectService periodicalHasSubjectService;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
 
     @GetMapping
     @RequestMapping("/shop")
@@ -113,11 +105,12 @@ public class ShopController {
     }
 
     @PostMapping("/shop")
-    public String postShop(Model model, HttpServletRequest request, @RequestParam(value = "categoryPer") String category, @RequestParam(value = "sort") String sort, @RequestParam(value = "order") String order, @RequestParam(value = "searchField") String searchField, @RequestParam("page") Integer page) {
+    public String postShop(HttpServletRequest request, @RequestParam(value = "categoryPer") String category, @RequestParam(value = "sort") String sort, @RequestParam(value = "order") String order, @RequestParam(value = "searchField") String searchField, @RequestParam("page") Integer page) {
         request.getSession().setAttribute("category", category);
         request.getSession().setAttribute("sort", sort);
         request.getSession().setAttribute("order", order);
         request.getSession().setAttribute("searchField", searchField);
+        logger.info("Sorting success");
         return "redirect:/shop?page=" + page;
     }
 

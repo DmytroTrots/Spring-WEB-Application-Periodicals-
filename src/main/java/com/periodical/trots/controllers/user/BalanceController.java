@@ -1,6 +1,8 @@
 package com.periodical.trots.controllers.user;
 
 import com.periodical.trots.services.UserServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class BalanceController {
+
+    private static final Logger logger = LoggerFactory.getLogger(BalanceController.class);
 
     @Autowired
     private UserServiceImpl userService;
@@ -34,6 +38,7 @@ public class BalanceController {
             redirectAttributes.addFlashAttribute("ex", "Баланс поповнено");
         }
         request.getSession().setAttribute("BALANCE", updatedBalance);
+        logger.info("Balance top-uped -->" + userId + ", " + balance);
         return "redirect:/top-up";
     }
 }

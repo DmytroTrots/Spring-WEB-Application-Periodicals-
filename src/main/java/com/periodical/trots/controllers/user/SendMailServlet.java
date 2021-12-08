@@ -1,6 +1,8 @@
 package com.periodical.trots.controllers.user;
 
 import com.periodical.trots.utils.Mailer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,8 @@ import javax.mail.MessagingException;
 
 @Controller
 public class SendMailServlet {
+
+    private static final Logger logger = LoggerFactory.getLogger(SendMailServlet.class);
 
     @GetMapping("/send-message")
     public String sendMessageGet() {
@@ -31,6 +35,7 @@ public class SendMailServlet {
         }else{
             redirectAttributes.addFlashAttribute("ex", "Лист успішно надіслано");
         }
+        logger.info("Letter was successfully sent");
         return "redirect:/send-message";
     }
 

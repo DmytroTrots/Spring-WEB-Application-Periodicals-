@@ -5,6 +5,8 @@ import com.periodical.trots.services.PeriodicalHasSubjectService;
 import com.periodical.trots.services.PeriodicalService;
 import com.periodical.trots.services.PublisherService;
 import com.periodical.trots.services.SubjectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,8 @@ import java.util.List;
 
 @Controller
 public class PeriodicalsAdminController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PeriodicalsAdminController.class);
 
     public static final String IMAGE_PATH = "C:\\Users\\Dima\\Desktop\\periodicalsSpring\\src\\main\\resources\\static\\images\\";
 
@@ -124,6 +128,7 @@ public class PeriodicalsAdminController {
         }
 
         langEx(redirectAttributes, "Periodical was updated", "Видання було оновлено");
+        logger.info("Periodical updated --> " + periodicalId);
 
         return "redirect:/periodicals";
     }
@@ -134,6 +139,7 @@ public class PeriodicalsAdminController {
     public String deletePeriodicalById(RedirectAttributes redirectAttributes, @RequestParam("periodicalId") Integer id) {
         periodicalService.deletePeriodical(id);
         langEx(redirectAttributes, "Periodical was deleted", "Видання було видалено");
+        logger.info("Periodical deleted --> " + id);
         return "redirect:/periodicals";
     }
 
@@ -202,6 +208,7 @@ public class PeriodicalsAdminController {
         }
 
         langEx(redirectAttributes, "Periodical was added", "Видання було додано");
+        logger.info("Periodical added --> " + periodicalForm.getTitle());
 
         return "redirect:/periodicals";
     }

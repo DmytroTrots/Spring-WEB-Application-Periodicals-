@@ -1,6 +1,5 @@
 package com.periodical.trots.utils;
 
-import com.periodical.trots.controllers.user.ShopController;
 import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.services.UserServiceImpl;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import java.text.DecimalFormat;
 @Component
 public class LoginSuccessListener implements ApplicationListener<AuthenticationSuccessEvent> {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShopController.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginSuccessListener.class);
 
     @Autowired
     private UserServiceImpl userService;

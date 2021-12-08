@@ -4,6 +4,8 @@ import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.services.SecurityService;
 import com.periodical.trots.services.UserService;
 import com.periodical.trots.services.UserServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,7 @@ public class UserController {
     @Autowired
     private SecurityService securityService;
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping("/registration")
     public String registration(Model model) {
@@ -57,6 +60,7 @@ public class UserController {
         }
 
         userService.save(userForm);
+        logger.info("User registered --> " + userForm.getUsername());
 
         langEx(redirectAttributes, lang, "User successfully registered", "Користувач успішно зареєстрований");
 

@@ -2,6 +2,8 @@ package com.periodical.trots.controllers.user;
 
 import com.periodical.trots.entities.*;
 import com.periodical.trots.services.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,8 @@ import java.util.List;
 
 @Controller
 public class CartController {
+
+    private static final Logger logger = LoggerFactory.getLogger(CartController.class);
 
     @Autowired
     private StatusService statusService;
@@ -79,6 +83,7 @@ public class CartController {
                 return "redirect:/login";
             }
         }
+        logger.info("All periodicals were ordered");
         return "redirect:/cart";
     }
 
@@ -189,6 +194,7 @@ public class CartController {
                 return "redirect:/shop?page="+page;
             }
         }
+        logger.info("Periodical was added to cart --> " + periodicalId);
         return "redirect:/shop?page="+page;
     }
 
@@ -231,6 +237,7 @@ public class CartController {
         request.getSession().setAttribute("BALANCE", actualBalance);
 
         periodicalHasReceiptService.saveOrder(periodicalHasReceipt);
+        logger.info("Periodical was ordered --> " + periodicalId);
         return "redirect:/shop?page="+page;
     }
 

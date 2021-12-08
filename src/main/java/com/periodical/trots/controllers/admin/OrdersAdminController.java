@@ -1,11 +1,13 @@
 package com.periodical.trots.controllers.admin;
 
+import com.periodical.trots.controllers.user.BalanceController;
 import com.periodical.trots.entities.PeriodicalHasReceiptEntity;
 import com.periodical.trots.entities.ReceiptEntity;
-import com.periodical.trots.services.PeriodicalHasReceiptService;
 import com.periodical.trots.services.ReceiptService;
 import com.periodical.trots.services.StatusService;
 import com.periodical.trots.services.UserServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,8 +24,7 @@ import java.util.List;
 @Controller
 public class OrdersAdminController {
 
-    @Autowired
-    private PeriodicalHasReceiptService periodicalHasReceiptService;
+    private static final Logger logger = LoggerFactory.getLogger(BalanceController.class);
 
     @Autowired
     private ReceiptService receiptService;
@@ -60,6 +61,7 @@ public class OrdersAdminController {
     public String acceptOrderByAdmin(RedirectAttributes redirectAttributes, @RequestParam("receiptId") Integer receiptId) {
         receiptService.acceptOrderByAdmin(receiptId, statusService.getStatusById(3));
         langEx(redirectAttributes, "Order was discarded", "Замовлення було відхилено");
+        logger.info("Order accepted --> " + receiptId);
         return "redirect:/orders";
     }
 
@@ -81,6 +83,7 @@ public class OrdersAdminController {
         receiptService.discardOrderByAdmin(receiptId, statusService.getStatusById(2));
 
         langEx(redirectAttributes, "Order was discarded", "Замовлення було відхилено");
+        logger.info("Order discarded --> " + receiptId);
         return "redirect:/orders";
     }
 

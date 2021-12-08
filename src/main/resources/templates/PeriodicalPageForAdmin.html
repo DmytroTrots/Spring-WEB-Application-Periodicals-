@@ -82,7 +82,7 @@
                                        class="col-md-4 col-form-label text-md-right" th:text="#{label.description}"></label>
                                 <div class="col-md-6">
                                     <input type="text" id="description" class="form-control" th:field="*{description}"
-                                           maxlength="1024" required autocomplete="off">
+                                           minlength="5" maxlength="1024" required autocomplete="off">
                                 </div>
                             </div>
 
