@@ -148,6 +148,10 @@ public class PeriodicalsAdminController {
             langEx(redirectAttributes, "Please, specify correct values", "Будь ласка, вказуйте коректні дані");
             return "redirect:/periodicals";
         }
+        if (periodicalService.getPeriodicalByTitle(periodicalForm.getTitle()) !=null){
+            langEx(redirectAttributes, "Periodical with such title already exist", "Видання з такою назвою уже існує");
+            return "redirect:/periodicals";
+        }
         PublisherEntity publisherEntity;
         PeriodicalHasSubjectEntity periodicalHasSubject = new PeriodicalHasSubjectEntity();
         PeriodicalHasSubjectEntityId periodicalHasSubjectEntityId = new PeriodicalHasSubjectEntityId();

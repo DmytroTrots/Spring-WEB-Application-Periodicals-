@@ -47,7 +47,7 @@
                     <span th:if="${iter2.last}" th:text="${periodical.id.periodicalSellId}"></span>
                 </span>
         </td>
-        <td th:text="${prices[iter.index]}"></td>
+        <td th:text="${session.decimalFormat.format(prices[iter.index])}"></td>
         <td th:text="${#dates.format(receipts.getCreateTime(), 'dd-MM-yyyy')}"></td>
         <td th:text="${receipts.status.statusName}"></td>
         <form th:action="@{/accept-order}" method="post" th:if="${receipts.status.statusName == 'payed'}">

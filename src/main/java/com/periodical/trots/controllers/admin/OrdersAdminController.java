@@ -47,7 +47,7 @@ public class OrdersAdminController {
             List<PeriodicalHasReceiptEntity> listOfPerHasEnt = new ArrayList<>(list.get(i).getReceiptEntities());
             for (PeriodicalHasReceiptEntity r : listOfPerHasEnt){
                 priceStart = r.getPricePerMonth();
-                priceFinal = priceFinal +priceStart.doubleValue()*r.getNumberOfMonth();
+                priceFinal = priceFinal +priceStart.doubleValue();
             }
             prices.add(priceFinal);
         }
@@ -73,7 +73,7 @@ public class OrdersAdminController {
         Double priceFinal = 0.0;
         for (PeriodicalHasReceiptEntity r : listOfPerHasEnt){
             priceStart = r.getPricePerMonth();
-            priceFinal = priceFinal +priceStart.doubleValue()*r.getNumberOfMonth();
+            priceFinal = priceFinal +priceStart.doubleValue();
         }
         actualBalance = actualBalance + priceFinal;
         userService.updateBalanceAfterPayment(receipt.getUser().getUsername(), actualBalance);

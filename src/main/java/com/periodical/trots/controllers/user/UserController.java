@@ -42,17 +42,16 @@ public class UserController {
     @PostMapping("/registration")
     public String registration(RedirectAttributes redirectAttributes, @Valid @ModelAttribute("userForm") UserEntity userForm, Errors errors, BindingResult bindingResult) {
         String lang = String.valueOf(LocaleContextHolder.getLocale());
-        if (errors.hasErrors()){
+        if (errors.hasErrors()) {
             return "UserRegistrationPage";
         }
-        if (userService.findByUsername(userForm.getUsername())!=null){
+        if (userService.findByUsername(userForm.getUsername()) != null) {
             langEx(redirectAttributes, lang, "User with such username already exist", "Користувач з таким нікнеймом уже існує");
             return "redirect:/registration";
-        }
-        else if(userServiceImpl.findUserByEmail(userForm.getEmail())!=null){
+        } else if (userServiceImpl.findUserByEmail(userForm.getEmail()) != null) {
             langEx(redirectAttributes, lang, "User with such email already exist", "Користувач з таким мейлом уже існує");
             return "redirect:/registration";
-        } else if(userServiceImpl.findUserByTelephone(userForm.getTelephone())!=null){
+        } else if (userServiceImpl.findUserByTelephone(userForm.getTelephone()) != null) {
             langEx(redirectAttributes, lang, "User with such telephone already exist", "Користувач з таким телефоном уже існує");
             return "redirect:/registration";
         }
@@ -69,10 +68,14 @@ public class UserController {
         if (securityService.isAuthenticated()) {
             return "redirect:/shop?page=0";
         }
-
-        if (error != null)
-            model.addAttribute("error", "Your username and password is invalid.");
-
+        String lang = String.valueOf(LocaleContextHolder.getLocale());
+        if (error != null) {
+            if (lang.equals("en_US") || lang.equals("en")) {
+                model.addAttribute("error", "Your username and password is invalid.");
+            } else {
+                model.addAttribute("error", "Логін чи пароль не коректні");
+            }
+        }
         return "LoginPage";
     }
 

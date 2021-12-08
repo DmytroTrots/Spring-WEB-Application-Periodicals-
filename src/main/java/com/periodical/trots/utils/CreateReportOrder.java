@@ -70,7 +70,7 @@ public class CreateReportOrder{
                             periodical.append(r.getPeriodical().getSellId()).append(", ");
                         }
                         priceStart = r.getPricePerMonth();
-                        priceFinal = priceFinal +priceStart.doubleValue()*r.getNumberOfMonth();
+                        priceFinal = priceFinal +priceStart.doubleValue();
                     }
                     periodicals.add(periodical.toString());
                     prices.add(priceFinal);
