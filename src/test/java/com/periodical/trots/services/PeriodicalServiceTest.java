@@ -71,4 +71,16 @@ class PeriodicalServiceTest {
         Assert.assertTrue(result);
 
     }
+
+    @Test
+    void getPeriodicalByTitle(){
+        PeriodicalEntity periodical = new PeriodicalEntity();
+        periodical.setTitle("title");
+
+        Mockito.doReturn(new PeriodicalEntity()).when(periodicalRepository).getByTitle(periodical.getTitle());
+
+        periodical = periodicalService.getPeriodicalByTitle(periodical.getTitle());
+
+        Assert.assertNotNull(periodical);
+    }
 }

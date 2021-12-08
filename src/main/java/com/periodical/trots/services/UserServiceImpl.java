@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * The type User service.
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -33,8 +36,19 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
+    /**
+     * Get all list.
+     *
+     * @return the list
+     */
     public List<UserEntity> getAll(){ return userRepository.findAll();}
 
+    /**
+     * Save user by admin boolean.
+     *
+     * @param user the user
+     * @return the boolean
+     */
     public boolean saveUserByAdmin(UserEntity user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setBalance(BigDecimal.valueOf(0));
@@ -42,6 +56,12 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     * Ban user by id boolean.
+     *
+     * @param userId the user id
+     * @return the boolean
+     */
     public boolean banUserById(Integer userId){
         UserEntity user = userRepository.getById(userId);
         if (user.getBanStatus() == null){
@@ -53,11 +73,25 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     * Delete user by id boolean.
+     *
+     * @param userId the user id
+     * @return the boolean
+     */
     public boolean deleteUserById(Integer userId){
         userRepository.deleteById(userId);
         return true;
     }
 
+    /**
+     * Top up balance double.
+     *
+     * @param balance        the balance
+     * @param currentBalance the current balance
+     * @param userId         the user id
+     * @return the double
+     */
     public Double topUpBalance(Double balance, Double currentBalance, Integer userId){
         UserEntity user = userRepository.getById(userId);
         Double updatedBalance = balance+currentBalance;
@@ -66,6 +100,13 @@ public class UserServiceImpl implements UserService {
         return updatedBalance;
     }
 
+    /**
+     * Update balance after payment boolean.
+     *
+     * @param username      the username
+     * @param actualBalance the actual balance
+     * @return the boolean
+     */
     public boolean updateBalanceAfterPayment(String username, Double actualBalance){
         UserEntity user = userRepository.findByUsername(username);
         user.setBalance(BigDecimal.valueOf(actualBalance));
@@ -73,12 +114,30 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     * Find user by id user entity.
+     *
+     * @param userId the user id
+     * @return the user entity
+     */
     public UserEntity findUserById(Integer userId){
         return userRepository.getById(userId);
     }
 
+    /**
+     * Find user by email user entity.
+     *
+     * @param email the email
+     * @return the user entity
+     */
     public UserEntity findUserByEmail(String email){return userRepository.findByEmail(email);}
 
+    /**
+     * Find user by telephone user entity.
+     *
+     * @param telephone the telephone
+     * @return the user entity
+     */
     public UserEntity findUserByTelephone(String telephone){return userRepository.findByTelephone(telephone);}
 
 

@@ -34,4 +34,12 @@ class PeriodicalHasReceiptServiceTest {
 
         Assert.assertTrue(result);
     }
+
+    @Test
+    void deleteOrdersAfterTimeTest(){
+        boolean result = periodicalHasReceiptService.deleteOrdersAfterTime();
+
+        Assert.assertTrue(result);
+    }
+
 }

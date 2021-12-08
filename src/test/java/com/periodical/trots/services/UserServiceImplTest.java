@@ -19,6 +19,9 @@ class UserServiceImplTest {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
     @MockBean
     private UserRepository userRepository;
 
@@ -135,4 +138,33 @@ class UserServiceImplTest {
 
         Assert.assertNotNull(user);
     }
+
+    @Test
+    void getUserByUserByEmail(){
+        UserEntity user = new UserEntity();
+        user.setEmail("email");
+
+        Mockito.doReturn(new UserEntity())
+                .when(userRepository)
+                .findByEmail(user.getEmail());
+
+        user = userService.findUserByEmail(user.getEmail());
+
+        Assert.assertNotNull(user);
+    }
+
+    @Test
+    void getUserByUserByTelephone(){
+        UserEntity user = new UserEntity();
+        user.setTelephone("telephone");
+
+        Mockito.doReturn(new UserEntity())
+                .when(userRepository)
+                .findByTelephone(user.getTelephone());
+
+        user = userService.findUserByTelephone(user.getTelephone());
+
+        Assert.assertNotNull(user);
+    }
+
 }

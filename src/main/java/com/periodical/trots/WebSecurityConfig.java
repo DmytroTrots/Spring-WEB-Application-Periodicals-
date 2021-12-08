@@ -28,7 +28,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/login", "/registration", "/shop", "/cart", "/css/**", "/images/**", "/favicon.ico").permitAll().antMatchers("/update-periodical").hasAuthority("admin")
+        http.authorizeRequests().antMatchers("/login", "/registration", "/shop", "/cart", "/css/**", "/images/**", "/favicon.ico")
+                .permitAll().antMatchers("/update-periodical", "/periodicals", "/users", "/discard-order", "/accept-order", "/delete-periodical","/add-periodical","/add-user","/ban-user","/delete-user")
+                .hasAuthority("admin")
+                .antMatchers("/top-up","/add-cart", "/buy-now","/profile","/send-message","/order-all")
+                .hasAuthority("customer")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
