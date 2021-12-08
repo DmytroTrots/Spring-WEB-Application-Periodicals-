@@ -45,7 +45,6 @@ public class CartController {
         Double totalPrice = (Double) req.getSession().getAttribute("totalPrice");
         List<Cart> cart_list = (List<Cart>) req.getSession().getAttribute("cart-list");
         String lang = String.valueOf(LocaleContextHolder.getLocale());
-        langEx(redirectAttributes, lang, "All periodicals were ordered","Всі видання були замовлені");
 
         if (cart_list != null && id != null && actualBalance > totalPrice) {
             UserEntity user = (UserEntity) req.getSession().getAttribute("USER");
@@ -77,11 +76,9 @@ public class CartController {
             userService.updateBalanceAfterPayment(user.getUsername(), actualBalance);
             req.getSession().setAttribute("BALANCE", actualBalance);
             cart_list.clear();
-            return "redirect:/cart";
+            langEx(redirectAttributes, lang, "All periodicals were ordered", "Всі видання були замовлені");
         } else {
-            if (id == null) {
-                return "redirect:/login";
-            }
+            langEx(redirectAttributes, lang, "Check your balance", "Перевірте баланс");
         }
         logger.info("All periodicals were ordered");
         return "redirect:/cart";
@@ -95,9 +92,9 @@ public class CartController {
         if (cart_list != null) {
             model.addAttribute("cartPeriodical", cart_list);
             BigDecimal pricePer = null;
-            for(Cart c : cart_list){
+            for (Cart c : cart_list) {
                 pricePer = c.getPeriodical().getPricePerMonth();
-                totalPrice = totalPrice + pricePer.doubleValue()*c.getMonths();
+                totalPrice = totalPrice + pricePer.doubleValue() * c.getMonths();
             }
             request.getSession().setAttribute("totalPrice", totalPrice);
         }
@@ -112,7 +109,7 @@ public class CartController {
         if (action != null && id >= 1) {
             if (action.equals("inc")) {
                 for (Cart c : cart_list) {
-                    if (c.getPeriodical().getSellId() == id && c.getMonths() <12) {
+                    if (c.getPeriodical().getSellId() == id && c.getMonths() < 12) {
                         int month = c.getMonths();
                         month++;
                         c.setMonths(month);
@@ -163,7 +160,7 @@ public class CartController {
         List<Cart> cartList = new ArrayList<>();
 
         String lang = String.valueOf(LocaleContextHolder.getLocale());
-        langEx(redirectAttributes, lang, "Periodical was added to cart","Видання додано до корзини");
+        langEx(redirectAttributes, lang, "Periodical was added to cart", "Видання додано до корзини");
 
         Cart cartObject = new Cart();
         PeriodicalEntity periodical = periodicalService.getPeriodicalById(periodicalId);
@@ -178,67 +175,71 @@ public class CartController {
         if (cart_list == null) {
             cartList.add(cartObject);
             request.getSession().setAttribute("cart-list", cartList);
-            return "redirect:/shop?page="+page;
+            return "redirect:/shop?page=" + page;
         } else {
             cartList = cart_list;
             boolean exist = false;
             for (Cart c : cartList) {
                 if (c.getPeriodical().getSellId() == periodicalId) {
                     exist = true;
-                    langEx(redirectAttributes, lang, "Periodical already in cart","Видання уже в корзині");
-                    return "redirect:/shop?page="+page;
+                    langEx(redirectAttributes, lang, "Periodical already in cart", "Видання уже в корзині");
+                    return "redirect:/shop?page=" + page;
                 }
             }
             if (!exist) {
                 cartList.add(cartObject);
-                return "redirect:/shop?page="+page;
+                return "redirect:/shop?page=" + page;
             }
         }
         logger.info("Periodical was added to cart --> " + periodicalId);
-        return "redirect:/shop?page="+page;
+        return "redirect:/shop?page=" + page;
     }
 
     @PostMapping("/buy-now")
     public String buyNow(RedirectAttributes redirectAttributes, @RequestParam("periodicalId") Integer periodicalId, @RequestParam("page") Integer page, HttpServletRequest request) {
         UserEntity user = (UserEntity) request.getSession().getAttribute("USER");
-
+        Double actualBalance = (Double) request.getSession().getAttribute("BALANCE");
         String lang = String.valueOf(LocaleContextHolder.getLocale());
-        langEx(redirectAttributes, lang, "Periodical was ordered","Видання було замовлено");
-
-        ReceiptEntity receiptEntity = new ReceiptEntity();
-        StatusEntity status = statusService.getStatusById(1);
-        receiptEntity.setStatus(status);
-        receiptEntity.setAdress(user.getAddress());
-        receiptEntity.setTelephoneNumber(user.getTelephone());
-        receiptEntity.setEmail(user.getEmail());
-        receiptEntity.setName(user.getName());
-        receiptEntity.setSurname(user.getSurname());
-        receiptEntity.setUser(user);
-        Integer receiptId = receiptService.saveReceipt(receiptEntity);
-
-        PeriodicalHasReceiptEntity periodicalHasReceipt = new PeriodicalHasReceiptEntity();
-        ReceiptEntity receipt = receiptService.getReceiptById(receiptId);
         PeriodicalEntity periodical = periodicalService.getPeriodicalById(periodicalId);
-        PeriodicalHasReceiptEntityId periodicalHasReceiptEntityId = new PeriodicalHasReceiptEntityId();
-        periodicalHasReceiptEntityId.setReceiptId(receiptId);
-        periodicalHasReceiptEntityId.setPeriodicalSellId(periodicalId);
-        periodicalHasReceipt.setmReceipt(receipt);
-        periodicalHasReceipt.setPeriodical(periodical);
-        periodicalHasReceipt.setId(periodicalHasReceiptEntityId);
-        periodicalHasReceipt.setPricePerMonth(periodical.getPricePerMonth());
-        periodicalHasReceipt.setNumberOfMonth(1);
-
-
         BigDecimal pricePerMonth = periodical.getPricePerMonth();
         Double totalPrice = pricePerMonth.doubleValue();
-        Double actualBalance = (Double) request.getSession().getAttribute("BALANCE");
-        actualBalance = actualBalance - totalPrice;
-        userService.updateBalanceAfterPayment(user.getUsername(), actualBalance);
-        request.getSession().setAttribute("BALANCE", actualBalance);
+        if (actualBalance < totalPrice) {
+            langEx(redirectAttributes, lang, "Periodical wasn't ordered, check balance", "Видання не було замовлено, перевірте баланс");
+            return "redirect:/shop?page=" + page;
+        } else {
 
-        periodicalHasReceiptService.saveOrder(periodicalHasReceipt);
-        logger.info("Periodical was ordered --> " + periodicalId);
-        return "redirect:/shop?page="+page;
+            ReceiptEntity receiptEntity = new ReceiptEntity();
+            StatusEntity status = statusService.getStatusById(1);
+            receiptEntity.setStatus(status);
+            receiptEntity.setAdress(user.getAddress());
+            receiptEntity.setTelephoneNumber(user.getTelephone());
+            receiptEntity.setEmail(user.getEmail());
+            receiptEntity.setName(user.getName());
+            receiptEntity.setSurname(user.getSurname());
+            receiptEntity.setUser(user);
+            Integer receiptId = receiptService.saveReceipt(receiptEntity);
+
+            PeriodicalHasReceiptEntity periodicalHasReceipt = new PeriodicalHasReceiptEntity();
+            ReceiptEntity receipt = receiptService.getReceiptById(receiptId);
+            PeriodicalHasReceiptEntityId periodicalHasReceiptEntityId = new PeriodicalHasReceiptEntityId();
+            periodicalHasReceiptEntityId.setReceiptId(receiptId);
+            periodicalHasReceiptEntityId.setPeriodicalSellId(periodicalId);
+            periodicalHasReceipt.setmReceipt(receipt);
+            periodicalHasReceipt.setPeriodical(periodical);
+            periodicalHasReceipt.setId(periodicalHasReceiptEntityId);
+            periodicalHasReceipt.setPricePerMonth(periodical.getPricePerMonth());
+            periodicalHasReceipt.setNumberOfMonth(1);
+
+
+            actualBalance = actualBalance - totalPrice;
+            userService.updateBalanceAfterPayment(user.getUsername(), actualBalance);
+            request.getSession().setAttribute("BALANCE", actualBalance);
+
+            periodicalHasReceiptService.saveOrder(periodicalHasReceipt);
+            logger.info("Periodical was ordered --> " + periodicalId);
+            langEx(redirectAttributes, lang, "Periodical was ordered", "Видання було замовлено");
+            return "redirect:/shop?page=" + page;
+        }
     }
 
     private void langEx(RedirectAttributes redirectAttributes, String lang, String s, String s2) {
