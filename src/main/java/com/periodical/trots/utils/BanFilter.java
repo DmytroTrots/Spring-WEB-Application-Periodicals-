@@ -20,8 +20,6 @@ public class BanFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         UserEntity user = (UserEntity) ((HttpServletRequest) servletRequest).getSession().getAttribute("USER");
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        System.out.println("filter");
         if (user != null && userService.findByUsername(user.getUsername()).getBanStatus() != null) {
             ((HttpServletRequest) servletRequest).getSession().invalidate();
             ((HttpServletResponse) servletResponse).sendRedirect("/login");

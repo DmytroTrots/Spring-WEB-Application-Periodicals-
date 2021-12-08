@@ -4,12 +4,14 @@ import com.periodical.trots.entities.PeriodicalHasReceiptEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * The interface Periodical has receipt repository.
  */
+@Repository
 public interface PeriodicalHasReceiptRepository extends JpaRepository<PeriodicalHasReceiptEntity, Integer> {
     /**
      * Find all orders of user list.
