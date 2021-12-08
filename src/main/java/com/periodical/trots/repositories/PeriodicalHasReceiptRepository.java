@@ -17,7 +17,7 @@ public interface PeriodicalHasReceiptRepository extends JpaRepository<Periodical
      * @param userId the user id
      * @return the list
      */
-    @Query("select r from PeriodicalHasReceiptEntity r where r.mReceipt.user.id = :userId")
+    @Query("select r from PeriodicalHasReceiptEntity r where r.mReceipt.user.id = :userId order by r.mReceipt.status.statusName asc")
     List<PeriodicalHasReceiptEntity> findAllOrdersOfUser(@Param("userId") Integer userId);
 
 }

@@ -53,6 +53,7 @@ public class UserEntity implements UserDetails{
     private String surname;
 
     @Column(name = "ban_status", length = 45)
+
     private String banStatus;
 
     @Column(name = "balance", columnDefinition="Decimal(9,2) default '0.00'")

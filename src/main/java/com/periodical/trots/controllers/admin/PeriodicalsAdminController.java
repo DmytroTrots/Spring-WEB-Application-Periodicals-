@@ -104,8 +104,8 @@ public class PeriodicalsAdminController {
         periodicalService.updatePeriodical(periodicalId, periodicalForm);
 
         SubjectEntity subjectEntity;
-        List<SubjectEntity> subjectEntities = subjectService.findAll();
         for (String s : subjectListFromWeb) {
+            List<SubjectEntity> subjectEntities = subjectService.findAll();
             if (!s.equals("")){
                 subjectEntity = subjectEntities.stream().filter(subjectEntity1 ->
                         s.equals(subjectEntity1.getThemesOfBooks())).findAny().orElse(null);
@@ -178,8 +178,8 @@ public class PeriodicalsAdminController {
 
         int periodicalId = periodicalService.addPeriodical(periodicalForm);
         SubjectEntity subjectEntity;
-        List<SubjectEntity> subjectEntities = subjectService.findAll();
         for (String s : subjectListFromWeb) {
+            List<SubjectEntity> subjectEntities = subjectService.findAll();
             if (!s.equals("")){
             subjectEntity = subjectEntities.stream().filter(subjectEntity1 ->
                     s.equals(subjectEntity1.getThemesOfBooks())).findAny().orElse(null);
