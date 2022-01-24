@@ -2,39 +2,46 @@ package com.periodical.trots.services;
 
 import com.periodical.trots.entities.SubjectEntity;
 import com.periodical.trots.repositories.SubjectRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest
-class SubjectServiceTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-    @Autowired
-    private SubjectService subjectService;
+@ExtendWith(MockitoExtension.class)
+public class SubjectServiceTest {
 
-    @MockBean
+    @InjectMocks
+    private SubjectService testInstance;
+
+    @Mock
     private SubjectRepository subjectRepository;
 
     @Test
-    void findAllTest() {
-        List<SubjectEntity> list = subjectService.findAll();
+    public void shouldFindAllSubjects() {
+        List<SubjectEntity> expectedList = new ArrayList<>();
+        when(subjectRepository.findAll()).thenReturn(expectedList);
 
-        Assert.assertNotNull(list);
+        List<SubjectEntity> actualList = testInstance.findAll();
 
-        Mockito.verify(subjectRepository, Mockito.times(1)).findAll();
+        assertEquals(expectedList, actualList);
     }
 
     @Test
-    void saveTest() {
-        SubjectEntity subjectEntity = new SubjectEntity();
-        Mockito.doReturn(new SubjectEntity(1)).when(subjectRepository).save(subjectEntity);
-        Integer result = subjectService.save(subjectEntity);
+    public void shouldSaveSubject() {
+        SubjectEntity subjectEntity = mock(SubjectEntity.class);
+        when(subjectEntity.getId()).thenReturn(1);
+        when(subjectRepository.save(subjectEntity)).thenReturn(subjectEntity);
 
-        Assert.assertNotNull(result);
+        Integer result = testInstance.save(subjectEntity);
+
+        assertEquals(subjectEntity.getId(), result);
     }
 }

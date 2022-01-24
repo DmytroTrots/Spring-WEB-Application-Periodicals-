@@ -2,32 +2,33 @@ package com.periodical.trots.services;
 
 import com.periodical.trots.entities.StatusEntity;
 import com.periodical.trots.repositories.StatusRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-class StatusServiceTest {
+@ExtendWith(MockitoExtension.class)
+public class StatusServiceTest {
 
-    @Autowired
-    private StatusService statusService;
+    @InjectMocks
+    private StatusService testInstance;
 
-    @MockBean
+    @Mock
     private StatusRepository statusRepository;
 
     @Test
-    void getStatusByIdTest() {
-        StatusEntity status = new StatusEntity();
-        status.setId(1);
-        Mockito.doReturn(new StatusEntity()).when(statusRepository).getById(1);
+    public void shouldGetStatusById() {
+        StatusEntity expectedStatus = mock(StatusEntity.class);
+        when(expectedStatus.getId()).thenReturn(1);
+        when(statusRepository.getById(expectedStatus.getId())).thenReturn(expectedStatus);
 
-        status = statusService.getStatusById(status.getId());
+        StatusEntity actualStatus = testInstance.getStatusById(expectedStatus.getId());
 
-        Assert.assertNotNull(status);
+        assertEquals(expectedStatus, actualStatus);
     }
 }

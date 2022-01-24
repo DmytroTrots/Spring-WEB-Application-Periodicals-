@@ -2,37 +2,47 @@ package com.periodical.trots.services;
 
 import com.periodical.trots.entities.PublisherEntity;
 import com.periodical.trots.repositories.PublisherRepository;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest
-class PublisherServiceTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-    @Autowired
-    private PublisherService publisherService;
+@ExtendWith(MockitoExtension.class)
+public class PublisherServiceTest {
 
-    @MockBean
+    @Mock
     private PublisherRepository publisherRepository;
 
-    @Test
-    void findAllTest() {
-        List<PublisherEntity> list = publisherService.findAll();
+    @InjectMocks
+    private PublisherService testInstance;
 
-        Assert.assertNotNull(list);
+    @Test
+    public void shouldSavePublisher() {
+        PublisherEntity initialPublisherEntity = mock(PublisherEntity.class);
+        when(initialPublisherEntity.getId()).thenReturn(1);
+        when(publisherRepository.save(initialPublisherEntity)).thenReturn(initialPublisherEntity);
+
+        int actual = testInstance.save(initialPublisherEntity);
+
+        assertEquals(1, actual);
     }
 
     @Test
-    void saveTest() {
-        PublisherEntity publisherEntity = new PublisherEntity();
-        Mockito.doReturn(new PublisherEntity(1)).when(publisherRepository).save(publisherEntity);
-        Integer result = publisherService.save(publisherEntity);
+    public void shouldFindAllPublisher() {
+        List<PublisherEntity> expectedList = new ArrayList<>();
+        when(publisherRepository.findAll()).thenReturn(expectedList);
 
-        Assert.assertNotNull(result);
+        List<PublisherEntity> actualList = testInstance.findAll();
+
+        Assertions.assertEquals(expectedList, actualList);
     }
 }

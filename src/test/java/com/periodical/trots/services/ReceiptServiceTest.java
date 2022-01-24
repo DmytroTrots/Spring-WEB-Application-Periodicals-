@@ -3,84 +3,72 @@ package com.periodical.trots.services;
 import com.periodical.trots.entities.ReceiptEntity;
 import com.periodical.trots.entities.StatusEntity;
 import com.periodical.trots.repositories.ReceiptRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest
-class ReceiptServiceTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-    @Autowired
-    private ReceiptService receiptService;
+@ExtendWith(MockitoExtension.class)
+public class ReceiptServiceTest {
 
-    @MockBean
+    @InjectMocks
+    private ReceiptService testInstance;
+
+    @Mock
     private ReceiptRepository receiptRepository;
 
     @Test
-    void getAllReceiptForAdminTest() {
-        List<ReceiptEntity> list = receiptService.getAllReceiptForAdmin();
+    public void shouldGetAllReceiptForAdmin() {
+        List<ReceiptEntity> expectedList = new ArrayList<>();
+        when(receiptRepository.findAll(Sort.by(Sort.Direction.ASC, "status"))).thenReturn(expectedList);
 
-        Assert.assertNotNull(list);
+        List<ReceiptEntity> actualList = testInstance.getAllReceiptForAdmin();
+
+        assertEquals(expectedList,actualList);
     }
 
     @Test
-    void acceptOrderByAdminTest() {
-        StatusEntity statusEntity = new StatusEntity();
-        ReceiptEntity receiptEntity = new ReceiptEntity();
-        receiptEntity.setId(1);
+    public void shouldAcceptOrderByAdmin() {
+        ReceiptEntity receiptEntity = mock(ReceiptEntity.class);
+        StatusEntity statusEntity = mock(StatusEntity.class);
+        when(receiptEntity.getId()).thenReturn(1);
+        when(receiptRepository.getById(receiptEntity.getId())).thenReturn(receiptEntity);
+        when(receiptRepository.save(receiptEntity)).thenReturn(receiptEntity);
 
-        Mockito.doReturn(new ReceiptEntity(1)).when(receiptRepository).getById(1);
+        boolean result = testInstance.acceptOrderByAdmin(receiptEntity.getId(), statusEntity);
 
-        boolean result = receiptService.acceptOrderByAdmin(receiptEntity.getId(), statusEntity);
-
-        Assert.assertTrue(result);
+        assertTrue(result);
     }
 
     @Test
-    void discardOrderByAdminTest() {
-        StatusEntity statusEntity = new StatusEntity();
-        ReceiptEntity receiptEntity = new ReceiptEntity();
-        receiptEntity.setId(1);
+    public void shouldSaveReceipt() {
+        ReceiptEntity receiptEntity = mock(ReceiptEntity.class);
+        when(receiptEntity.getId()).thenReturn(1);
+        when(receiptRepository.save(receiptEntity)).thenReturn(receiptEntity);
 
-        Mockito.doReturn(new ReceiptEntity(1)).when(receiptRepository).getById(1);
+        Integer result = testInstance.saveReceipt(receiptEntity);
 
-        boolean result = receiptService.discardOrderByAdmin(receiptEntity.getId(), statusEntity);
-
-        Assert.assertTrue(result);
+        assertEquals(receiptEntity.getId(), result);
     }
 
     @Test
-    void saveReceiptTest() {
-        ReceiptEntity receiptEntity = new ReceiptEntity();
-        Mockito.doReturn(new ReceiptEntity(1)).when(receiptRepository).save(receiptEntity);
-        Integer result = receiptService.saveReceipt(receiptEntity);
+    public void shouldGetReceiptById() {
+        ReceiptEntity expectedReceipt = mock(ReceiptEntity.class);
+        when(expectedReceipt.getId()).thenReturn(1);
+        when(receiptRepository.getById(expectedReceipt.getId())).thenReturn(expectedReceipt);
 
-        Assert.assertNotNull(result);
-    }
+        ReceiptEntity actualReceipt = testInstance.getReceiptById(expectedReceipt.getId());
 
-    @Test
-    void getReceiptByIdTest() {
-        ReceiptEntity receipt = new ReceiptEntity();
-        receipt.setId(1);
-
-        Mockito.doReturn(new ReceiptEntity()).when(receiptRepository).getById(1);
-
-        receipt = receiptService.getReceiptById(receipt.getId());
-
-        Assert.assertNotNull(receipt);
-    }
-
-    @Test
-    void getReceiptsForDailyOrderTest() {
-        Date date = new Date();
-        List<ReceiptEntity> list = receiptService.getReceiptsForDailyOrder(date);
-
-        Assert.assertNotNull(list);
+        assertEquals(expectedReceipt, actualReceipt);
     }
 }

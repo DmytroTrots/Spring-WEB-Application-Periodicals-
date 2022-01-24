@@ -2,85 +2,97 @@ package com.periodical.trots.services;
 
 import com.periodical.trots.entities.PeriodicalEntity;
 import com.periodical.trots.repositories.PeriodicalRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest
-class PeriodicalServiceTest {
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-    @Autowired
-    private PeriodicalService periodicalService;
+@ExtendWith(MockitoExtension.class)
+public class PeriodicalServiceTest {
 
-    @MockBean
+    @Mock
     private PeriodicalRepository periodicalRepository;
 
-    @Test
-    void getAllPeriodicalsTest() {
-        List<PeriodicalEntity> list = periodicalService.getAllPeriodicals();
+    @InjectMocks
+    @Spy
+    private PeriodicalService testInstance;
 
-        Assert.assertNotNull(list);
+    @Test
+    public void shouldAddPeriodical() {
+        PeriodicalEntity periodicalEntity = mock(PeriodicalEntity.class);
+        when(periodicalEntity.getSellId()).thenReturn(5);
+        when(periodicalRepository.save(periodicalEntity)).thenReturn(periodicalEntity);
+
+        Integer actual = testInstance.addPeriodical(periodicalEntity);
+
+        assertThat(actual).isEqualTo(5);
     }
 
     @Test
-    void deletePeriodicalTest() {
-        PeriodicalEntity periodical = new PeriodicalEntity();
-        periodical.setSellId(1);
+    public void shouldGetPeriodicalById() {
+        PeriodicalEntity expectedPeriodical = mock(PeriodicalEntity.class);
+//        PeriodicalEntity expectedPeriodical = new PeriodicalEntity();
+        when(expectedPeriodical.getSellId()).thenReturn(1);
+        when(periodicalRepository.getBySellId(expectedPeriodical.getSellId())).thenReturn(expectedPeriodical);
 
-        boolean deletePeriodical = periodicalService.deletePeriodical(periodical.getSellId());
+        PeriodicalEntity actualPeriodical = testInstance.getPeriodicalById(expectedPeriodical.getSellId());
 
-        Assert.assertTrue(deletePeriodical);
+        assertThat(actualPeriodical).isEqualTo(expectedPeriodical);
     }
 
     @Test
-    void addPeriodicalTest() {
-        PeriodicalEntity periodical = new PeriodicalEntity();
-        Mockito.doReturn(new PeriodicalEntity(1)).when(periodicalRepository).save(periodical);
-        Integer result = periodicalService.addPeriodical(periodical);
+    public void shouldUpdatePeriodical() {
+        PeriodicalEntity initialPeriodical = mock(PeriodicalEntity.class);
+        PeriodicalEntity periodicalForUpdate = mock(PeriodicalEntity.class);
 
-        Assert.assertNotNull(result);
+        when(periodicalRepository.getBySellId(1)).thenReturn(initialPeriodical);
+        when(periodicalRepository.save(initialPeriodical)).thenReturn(initialPeriodical);
+
+        boolean actualResult = testInstance.updatePeriodical(1, periodicalForUpdate);
+
+        assertTrue(actualResult);
     }
 
     @Test
-    void getPeriodicalByIdTest() {
-        PeriodicalEntity periodical = new PeriodicalEntity();
-        periodical.setSellId(1);
+    public void shouldGetAllPeriodicals() {
+        List<PeriodicalEntity> expectedPeriodicals = new ArrayList<>();
+        when(periodicalRepository.findAll()).thenReturn(expectedPeriodicals);
 
-        Mockito.doReturn(new PeriodicalEntity()).when(periodicalRepository).getBySellId(1);
+        List<PeriodicalEntity> actualPeriodicals = testInstance.getAllPeriodicals();
 
-        periodical = periodicalService.getPeriodicalById(periodical.getSellId());
-
-        Assert.assertNotNull(periodical);
+        assertEquals(expectedPeriodicals, actualPeriodicals);
     }
 
     @Test
-    void updatePeriodicalTest() {
-        PeriodicalEntity periodical = new PeriodicalEntity();
-        periodical.setSellId(1);
-        PeriodicalEntity periodicalForm = new PeriodicalEntity();
+    public void shouldDeletePeriodicalTest() {
+        PeriodicalEntity periodical = mock(PeriodicalEntity.class);
+        when(periodical.getSellId()).thenReturn(1);
 
-        Mockito.doReturn(new PeriodicalEntity()).when(periodicalRepository).getBySellId(1);
+        boolean deletePeriodical = testInstance.deletePeriodical(periodical.getSellId());
 
-        boolean result = periodicalService.updatePeriodical(periodical.getSellId(), periodicalForm);
-
-        Assert.assertTrue(result);
-
+        assertTrue(deletePeriodical);
     }
 
     @Test
-    void getPeriodicalByTitle(){
-        PeriodicalEntity periodical = new PeriodicalEntity();
-        periodical.setTitle("title");
+    public void shouldGetPeriodicalByTitle(){
+        PeriodicalEntity expectedPeriodical = mock(PeriodicalEntity.class);
 
-        Mockito.doReturn(new PeriodicalEntity()).when(periodicalRepository).getByTitle(periodical.getTitle());
+        when(expectedPeriodical.getTitle()).thenReturn("testTile");
+        when(periodicalRepository.getByTitle(expectedPeriodical.getTitle())).thenReturn(expectedPeriodical);
 
-        periodical = periodicalService.getPeriodicalByTitle(periodical.getTitle());
+        PeriodicalEntity actualPeriodical = testInstance.getPeriodicalByTitle(expectedPeriodical.getTitle());
 
-        Assert.assertNotNull(periodical);
+        assertEquals(expectedPeriodical, actualPeriodical);
     }
 }

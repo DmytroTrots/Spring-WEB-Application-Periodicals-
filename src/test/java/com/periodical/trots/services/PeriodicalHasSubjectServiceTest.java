@@ -2,29 +2,33 @@ package com.periodical.trots.services;
 
 import com.periodical.trots.entities.PeriodicalHasSubjectEntity;
 import com.periodical.trots.repositories.PeriodicalHasSubjectRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@SpringBootTest
-class PeriodicalHasSubjectServiceTest {
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-    @Autowired
-    private PeriodicalHasSubjectService periodicalHasSubjectService;
+@ExtendWith(MockitoExtension.class)
+public class PeriodicalHasSubjectServiceTest {
 
-    @MockBean
+    @InjectMocks
+    private PeriodicalHasSubjectService testInstance;
+
+    @Mock
     private PeriodicalHasSubjectRepository periodicalHasSubjectRepository;
 
-
     @Test
-    void save() {
-        PeriodicalHasSubjectEntity periodicalHasSubject = new PeriodicalHasSubjectEntity();
+    public void shouldSaveSubjectOfPeriodical() {
+        PeriodicalHasSubjectEntity periodicalHasSubject = mock(PeriodicalHasSubjectEntity.class);
+        when(periodicalHasSubjectRepository.save(periodicalHasSubject)).thenReturn(periodicalHasSubject);
 
-        boolean result = periodicalHasSubjectService.save(periodicalHasSubject);
+        boolean result = testInstance.save(periodicalHasSubject);
 
-        Assert.assertTrue(result);
+        assertTrue(result);
     }
 
 }

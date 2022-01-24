@@ -2,169 +2,161 @@ package com.periodical.trots.services;
 
 import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.repositories.UserRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest
-class UserServiceImplTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-    @Autowired
-    private UserServiceImpl userService;
+@ExtendWith(MockitoExtension.class)
+public class UserServiceImplTest {
 
-    @Autowired
+    @InjectMocks
+    private UserServiceImpl testInstance;
+
+    @InjectMocks
     private UserDetailsServiceImpl userDetailsService;
 
-    @MockBean
+    @Mock
     private UserRepository userRepository;
 
-    @MockBean
+    @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Test
-    void saveUserTest() {
-        UserEntity user = new UserEntity();
-        boolean userCreated = userService.save(user);
+    public void shouldSaveUser() {
+        UserEntity user = mock(UserEntity.class);
+        when(user.getPassword()).thenReturn("password");
+        when(bCryptPasswordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
+        when(userRepository.save(user)).thenReturn(user);
 
-        Assert.assertTrue(userCreated);
-        Assert.assertEquals("customer", user.getRole());
-        Assert.assertEquals(0.0, user.getBalance().doubleValue(), 0.01);
+        boolean userCreated = testInstance.save(user);
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(user);
-
+        assertTrue(userCreated);
     }
 
     @Test
-    void getAllUserTest() {
-        List<UserEntity> list = userService.getAll();
+    public void shouldGetAllUsers() {
+        List<UserEntity> expectedList = new ArrayList<>();
+        when(userRepository.findAll()).thenReturn(expectedList);
 
-        Assert.assertNotNull(list);
+        List<UserEntity> actualList = testInstance.getAll();
 
-        Mockito.verify(userRepository, Mockito.times(1)).findAll();
+        assertEquals(expectedList, actualList);
     }
 
     @Test
-    void findByUsernameTest() {
-        UserEntity user = new UserEntity();
-        user.setUsername("customer");
+    public void shouldFindUserByUsername() {
+        UserEntity expectedUser = mock(UserEntity.class);
+        when(expectedUser.getUsername()).thenReturn("customer");
+        when(userRepository.findByUsername(expectedUser.getUsername())).thenReturn(expectedUser);
 
-        Mockito.doReturn(new UserEntity())
-                .when(userRepository)
-                .findByUsername("customer");
+        UserEntity actualUser = testInstance.findByUsername(expectedUser.getUsername());
 
-        user = userService.findByUsername(user.getUsername());
-
-        Assert.assertNotNull(user);
+        assertEquals(expectedUser, actualUser);
     }
 
     @Test
-    void saveUserByAdminTest(){
-        UserEntity user = new UserEntity();
-        boolean userCreated = userService.saveUserByAdmin(user);
+    public void shouldSaveUserByAdmin() {
+        UserEntity user = mock(UserEntity.class);
+        when(user.getPassword()).thenReturn("password");
+        when(bCryptPasswordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
+        when(userRepository.save(user)).thenReturn(user);
 
-        Assert.assertTrue(userCreated);
-        Assert.assertEquals(0.0, user.getBalance().doubleValue(), 0.01);
+        boolean userCreated = testInstance.save(user);
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(user);
+        assertTrue(userCreated);
     }
 
     @Test
-    void banUserTest(){
-        UserEntity user = new UserEntity();
-        user.setId(1);
-        user.setBanStatus(null);
+    public void shouldBanUser() {
+        UserEntity user = mock(UserEntity.class);
+        when(user.getId()).thenReturn(1);
+        when(userRepository.getById(user.getId())).thenReturn(user);
+        when(userRepository.save(user)).thenReturn(user);
 
-        Mockito.doReturn(new UserEntity()).when(userRepository).getById(1);
-        boolean isBanned = userService.banUserById(user.getId());
+        boolean isBanned = testInstance.banUserById(user.getId());
 
-        Assert.assertTrue(isBanned);
+        assertTrue(isBanned);
+    }
+
+
+    @Test
+    public void shouldTopUpBalance() {
+        UserEntity user = mock(UserEntity.class);
+        when(user.getBalance()).thenReturn(BigDecimal.valueOf(200));
+        when(user.getId()).thenReturn(1);
+        when(userRepository.getById(user.getId())).thenReturn(user);
+        when(userRepository.save(user)).thenReturn(user);
+
+        Double actualBalance = testInstance.topUpBalance(200.0, user.getBalance().doubleValue(), user.getId());
+
+        assertEquals(400, actualBalance, 0.01);
     }
 
     @Test
-    void deleteUserByIdTest(){
-        UserEntity user = new UserEntity();
-        user.setId(1);
+    public void shouldUpdateBalance() {
+        UserEntity user = mock(UserEntity.class);
+        when(user.getBalance()).thenReturn(BigDecimal.valueOf(200));
+        when(user.getUsername()).thenReturn("username");
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
+        when(userRepository.save(user)).thenReturn(user);
 
-        boolean deleteUser = userService.deleteUserById(user.getId());
+        boolean isUpdated = testInstance.updateBalanceAfterPayment(user.getUsername(), user.getBalance().doubleValue());
 
-        Assert.assertTrue(deleteUser);
+        assertTrue(isUpdated);
     }
 
     @Test
-    void topUpBalanceTest(){
-        UserEntity user = new UserEntity();
-        user.setBalance(BigDecimal.valueOf(200));
-        user.setId(1);
+    public void shouldFindUserById() {
+        UserEntity expectedUser = mock(UserEntity.class);
+        when(expectedUser.getId()).thenReturn(1);
+        when(userRepository.getById(expectedUser.getId())).thenReturn(expectedUser);
 
-        Mockito.doReturn(new UserEntity()).when(userRepository).getById(1);
+        UserEntity actualUser = testInstance.findUserById(expectedUser.getId());
 
-        Double currentBalance = user.getBalance().doubleValue();
-
-        Double balance = userService.topUpBalance(200.0,currentBalance, user.getId());
-
-        Assert.assertEquals(400.0,balance, 0.01);
+        assertEquals(expectedUser, actualUser);
     }
 
     @Test
-    void updateBalanceTest(){
-        UserEntity user = new UserEntity();
-        user.setBalance(BigDecimal.valueOf(200));
-        user.setId(1);
+    public void shouldGetUserByEmail() {
+        UserEntity expectedUser = mock(UserEntity.class);
+        when(expectedUser.getEmail()).thenReturn("mail@gmail.com");
+        when(userRepository.findByEmail(expectedUser.getEmail())).thenReturn(expectedUser);
 
-        Mockito.doReturn(new UserEntity()).when(userRepository).getById(1);
+        UserEntity actualUser = testInstance.findUserByEmail(expectedUser.getEmail());
 
-        boolean isUpdated = userService.updateBalanceAfterPayment(user.getUsername(), 400.0);
-
-        Assert.assertTrue(isUpdated);
+        assertEquals(expectedUser, actualUser);
     }
 
     @Test
-    void findUserByIdTest(){
-        UserEntity user = new UserEntity();
-        user.setId(1);
+    public void shouldGetUserByTelephone() {
+        UserEntity expectedUser = mock(UserEntity.class);
+        when(expectedUser.getTelephone()).thenReturn("380999999999");
+        when(userRepository.findByTelephone(expectedUser.getTelephone())).thenReturn(expectedUser);
 
-        Mockito.doReturn(new UserEntity())
-                .when(userRepository)
-                .getById(1);
+        UserEntity actualUser = testInstance.findUserByTelephone(expectedUser.getTelephone());
 
-        user = userService.findUserById(user.getId());
-
-        Assert.assertNotNull(user);
+        assertEquals(expectedUser, actualUser);
     }
 
-    @Test
-    void getUserByUserByEmail(){
-        UserEntity user = new UserEntity();
-        user.setEmail("email");
-
-        Mockito.doReturn(new UserEntity())
-                .when(userRepository)
-                .findByEmail(user.getEmail());
-
-        user = userService.findUserByEmail(user.getEmail());
-
-        Assert.assertNotNull(user);
-    }
-
-    @Test
-    void getUserByUserByTelephone(){
-        UserEntity user = new UserEntity();
-        user.setTelephone("telephone");
-
-        Mockito.doReturn(new UserEntity())
-                .when(userRepository)
-                .findByTelephone(user.getTelephone());
-
-        user = userService.findUserByTelephone(user.getTelephone());
-
-        Assert.assertNotNull(user);
-    }
+//    @Test
+//    public void shouldDeleteUserById() {
+//        UserEntity user = mock(UserEntity.class);
+//
+//        boolean deleteUser = testInstance.deleteUserById(user.getId());
+//
+//        Assert.assertTrue(deleteUser);
+//    }
 
 }
