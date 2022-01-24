@@ -42,7 +42,6 @@ public class PeriodicalServiceTest {
     @Test
     public void shouldGetPeriodicalById() {
         PeriodicalEntity expectedPeriodical = mock(PeriodicalEntity.class);
-//        PeriodicalEntity expectedPeriodical = new PeriodicalEntity();
         when(expectedPeriodical.getSellId()).thenReturn(1);
         when(periodicalRepository.getBySellId(expectedPeriodical.getSellId())).thenReturn(expectedPeriodical);
 

@@ -18,7 +18,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -41,7 +40,9 @@ public class UserServiceImpl implements UserService {
      *
      * @return the list
      */
-    public List<UserEntity> getAll(){ return userRepository.findAll();}
+    public List<UserEntity> getAll() {
+        return userRepository.findAll();
+    }
 
     /**
      * Save user by admin boolean.
@@ -62,11 +63,11 @@ public class UserServiceImpl implements UserService {
      * @param userId the user id
      * @return the boolean
      */
-    public boolean banUserById(Integer userId){
+    public boolean banUserById(Integer userId) {
         UserEntity user = userRepository.getById(userId);
-        if (user.getBanStatus() == null){
+        if (user.getBanStatus() == null) {
             user.setBanStatus("banned");
-        }else {
+        } else {
             user.setBanStatus(null);
         }
         userRepository.save(user);
@@ -79,7 +80,7 @@ public class UserServiceImpl implements UserService {
      * @param userId the user id
      * @return the boolean
      */
-    public boolean deleteUserById(Integer userId){
+    public boolean deleteUserById(Integer userId) {
         userRepository.deleteById(userId);
         return true;
     }
@@ -92,9 +93,9 @@ public class UserServiceImpl implements UserService {
      * @param userId         the user id
      * @return the double
      */
-    public Double topUpBalance(Double balance, Double currentBalance, Integer userId){
+    public Double topUpBalance(Double balance, Double currentBalance, Integer userId) {
         UserEntity user = userRepository.getById(userId);
-        Double updatedBalance = balance+currentBalance;
+        Double updatedBalance = balance + currentBalance;
         user.setBalance(BigDecimal.valueOf(updatedBalance));
         userRepository.save(user);
         return updatedBalance;
@@ -107,7 +108,7 @@ public class UserServiceImpl implements UserService {
      * @param actualBalance the actual balance
      * @return the boolean
      */
-    public boolean updateBalanceAfterPayment(String username, Double actualBalance){
+    public boolean updateBalanceAfterPayment(String username, Double actualBalance) {
         UserEntity user = userRepository.findByUsername(username);
         user.setBalance(BigDecimal.valueOf(actualBalance));
         userRepository.save(user);
@@ -120,7 +121,7 @@ public class UserServiceImpl implements UserService {
      * @param userId the user id
      * @return the user entity
      */
-    public UserEntity findUserById(Integer userId){
+    public UserEntity findUserById(Integer userId) {
         return userRepository.getById(userId);
     }
 
@@ -130,7 +131,9 @@ public class UserServiceImpl implements UserService {
      * @param email the email
      * @return the user entity
      */
-    public UserEntity findUserByEmail(String email){return userRepository.findByEmail(email);}
+    public UserEntity findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
     /**
      * Find user by telephone user entity.
@@ -138,7 +141,9 @@ public class UserServiceImpl implements UserService {
      * @param telephone the telephone
      * @return the user entity
      */
-    public UserEntity findUserByTelephone(String telephone){return userRepository.findByTelephone(telephone);}
+    public UserEntity findUserByTelephone(String telephone) {
+        return userRepository.findByTelephone(telephone);
+    }
 
 
 }

@@ -2,7 +2,6 @@ package com.periodical.trots.services;
 
 import com.periodical.trots.entities.PeriodicalEntity;
 import com.periodical.trots.repositories.PeriodicalRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +12,11 @@ import java.util.List;
 @Service
 public class PeriodicalService {
 
-    @Autowired
-    private PeriodicalRepository periodicalRepository;
+    private final PeriodicalRepository periodicalRepository;
+
+    public PeriodicalService(PeriodicalRepository periodicalRepository) {
+        this.periodicalRepository = periodicalRepository;
+    }
 
     /**
      * Gets all periodicals.
