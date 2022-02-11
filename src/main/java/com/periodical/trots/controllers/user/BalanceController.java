@@ -1,6 +1,6 @@
 package com.periodical.trots.controllers.user;
 
-import com.periodical.trots.services.UserServiceImpl;
+import com.periodical.trots.services.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,11 @@ public class BalanceController {
 
     private static final Logger logger = LoggerFactory.getLogger(BalanceController.class);
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
+
+    public BalanceController(UserServiceImpl userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/top-up")
     public String topUpBalance(){

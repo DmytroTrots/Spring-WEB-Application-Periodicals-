@@ -3,10 +3,9 @@ package com.periodical.trots.controllers.user;
 import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.services.SecurityService;
 import com.periodical.trots.services.UserService;
-import com.periodical.trots.services.UserServiceImpl;
+import com.periodical.trots.services.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,16 +20,20 @@ import javax.validation.Valid;
 
 @Controller
 public class UserController {
-    @Autowired
-    private UserService userService;
 
-    @Autowired
-    private UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
-    @Autowired
-    private SecurityService securityService;
+    private final UserServiceImpl userServiceImpl;
+
+    private final SecurityService securityService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    public UserController(UserService userService, UserServiceImpl userServiceImpl, SecurityService securityService) {
+        this.userService = userService;
+        this.userServiceImpl = userServiceImpl;
+        this.securityService = securityService;
+    }
 
     @GetMapping("/registration")
     public String registration(Model model) {

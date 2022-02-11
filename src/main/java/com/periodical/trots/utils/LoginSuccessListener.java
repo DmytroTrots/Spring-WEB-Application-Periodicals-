@@ -1,7 +1,7 @@
 package com.periodical.trots.utils;
 
 import com.periodical.trots.entities.UserEntity;
-import com.periodical.trots.services.UserServiceImpl;
+import com.periodical.trots.services.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

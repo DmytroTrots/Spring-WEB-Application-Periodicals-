@@ -2,6 +2,7 @@ package com.periodical.trots.controllers.user;
 
 import com.periodical.trots.entities.*;
 import com.periodical.trots.services.*;
+import com.periodical.trots.services.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +24,23 @@ public class CartController {
 
     private static final Logger logger = LoggerFactory.getLogger(CartController.class);
 
-    @Autowired
-    private StatusService statusService;
+    private final StatusService statusService;
 
-    @Autowired
-    private ReceiptService receiptService;
+    private final ReceiptService receiptService;
 
-    @Autowired
-    private PeriodicalHasReceiptService periodicalHasReceiptService;
+    private final PeriodicalHasReceiptService periodicalHasReceiptService;
 
-    @Autowired
-    private PeriodicalService periodicalService;
+    private final PeriodicalService periodicalService;
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
+
+    public CartController(StatusService statusService, ReceiptService receiptService, PeriodicalHasReceiptService periodicalHasReceiptService, PeriodicalService periodicalService, UserServiceImpl userService) {
+        this.statusService = statusService;
+        this.receiptService = receiptService;
+        this.periodicalHasReceiptService = periodicalHasReceiptService;
+        this.periodicalService = periodicalService;
+        this.userService = userService;
+    }
 
     @PostMapping("/order-all")
     public String orderAllFromCart(RedirectAttributes redirectAttributes, HttpServletRequest req, @RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("email") String email, @RequestParam("telephone") String telephone, @RequestParam("address") String address) {

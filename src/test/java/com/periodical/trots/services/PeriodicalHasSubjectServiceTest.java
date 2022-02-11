@@ -8,9 +8,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PeriodicalHasSubjectServiceTest {
@@ -29,6 +32,20 @@ public class PeriodicalHasSubjectServiceTest {
         boolean result = testInstance.save(periodicalHasSubject);
 
         assertTrue(result);
+    }
+
+    @Test
+    public void testforTest(){
+        List<String> list = new ArrayList<>();
+        List<String> spyList = spy(list);
+
+        spyList.add("one");
+        spyList.add("two");
+
+        verify(spyList).add("one");
+        verify(spyList).add("two");
+
+        assertEquals(2, spyList.size());
     }
 
 }

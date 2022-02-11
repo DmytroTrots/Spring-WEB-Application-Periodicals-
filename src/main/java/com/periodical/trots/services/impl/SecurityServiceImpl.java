@@ -1,5 +1,6 @@
-package com.periodical.trots.services;
+package com.periodical.trots.services.impl;
 
+import com.periodical.trots.services.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;

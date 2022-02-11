@@ -5,7 +5,7 @@ import com.periodical.trots.entities.PeriodicalHasSubjectEntity;
 import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.services.PeriodicalHasSubjectService;
 import com.periodical.trots.services.SubjectService;
-import com.periodical.trots.services.UserServiceImpl;
+import com.periodical.trots.services.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +28,17 @@ public class ShopController {
 
     private static final Logger logger = LoggerFactory.getLogger(ShopController.class);
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
-    @Autowired
-    private SubjectService subjectService;
+    private final SubjectService subjectService;
 
-    @Autowired
-    private PeriodicalHasSubjectService periodicalHasSubjectService;
+    private final PeriodicalHasSubjectService periodicalHasSubjectService;
+
+    public ShopController(UserServiceImpl userService, SubjectService subjectService, PeriodicalHasSubjectService periodicalHasSubjectService) {
+        this.userService = userService;
+        this.subjectService = subjectService;
+        this.periodicalHasSubjectService = periodicalHasSubjectService;
+    }
 
     @GetMapping
     @RequestMapping("/shop")

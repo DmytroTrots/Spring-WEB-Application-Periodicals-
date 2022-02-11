@@ -31,17 +31,20 @@ public class PeriodicalsAdminController {
 
     public static final String IMAGE_PATH = "C:\\Users\\Dima\\Desktop\\periodicalsSpring\\src\\main\\resources\\static\\images\\";
 
-    @Autowired
-    private PeriodicalService periodicalService;
+    private final PeriodicalService periodicalService;
 
-    @Autowired
-    private PublisherService publisherService;
+    private final PublisherService publisherService;
 
-    @Autowired
-    private SubjectService subjectService;
+    private final SubjectService subjectService;
 
-    @Autowired
-    private PeriodicalHasSubjectService periodicalHasSubjectService;
+    private final PeriodicalHasSubjectService periodicalHasSubjectService;
+
+    public PeriodicalsAdminController(PeriodicalService periodicalService, PublisherService publisherService, SubjectService subjectService, PeriodicalHasSubjectService periodicalHasSubjectService) {
+        this.periodicalService = periodicalService;
+        this.publisherService = publisherService;
+        this.subjectService = subjectService;
+        this.periodicalHasSubjectService = periodicalHasSubjectService;
+    }
 
     @GetMapping("/periodicals")
     public String periodicalsPageForAdmin(Model model) {

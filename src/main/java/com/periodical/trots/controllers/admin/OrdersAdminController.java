@@ -5,10 +5,9 @@ import com.periodical.trots.entities.PeriodicalHasReceiptEntity;
 import com.periodical.trots.entities.ReceiptEntity;
 import com.periodical.trots.services.ReceiptService;
 import com.periodical.trots.services.StatusService;
-import com.periodical.trots.services.UserServiceImpl;
+import com.periodical.trots.services.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,14 +25,17 @@ public class OrdersAdminController {
 
     private static final Logger logger = LoggerFactory.getLogger(BalanceController.class);
 
-    @Autowired
-    private ReceiptService receiptService;
+    private final ReceiptService receiptService;
 
-    @Autowired
-    private StatusService statusService;
+    private final StatusService statusService;
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
+
+    public OrdersAdminController(ReceiptService receiptService, StatusService statusService, UserServiceImpl userService) {
+        this.receiptService = receiptService;
+        this.statusService = statusService;
+        this.userService = userService;
+    }
 
     @GetMapping("/orders")
     public String periodicalsPageForAdmin(Model model) {

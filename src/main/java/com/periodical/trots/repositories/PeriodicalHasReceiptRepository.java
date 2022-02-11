@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface PeriodicalHasReceiptRepository extends JpaRepository<PeriodicalHasReceiptEntity, Integer> {
     /**
-     * Find all orders of user list.
+     * Find all orders of users.
      *
      * @param userId the user id
      * @return the list

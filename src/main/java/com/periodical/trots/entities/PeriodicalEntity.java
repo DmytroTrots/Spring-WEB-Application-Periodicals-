@@ -7,9 +7,6 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Set;
 
-/**
- * The type Periodical entity.
- */
 @Table(name = "periodical", indexes = {@Index(name = "idx_periodical_title", columnList = "title"), @Index(name = "fk_periodical_publisher1_idx", columnList = "publisher_id")}, uniqueConstraints = {@UniqueConstraint(name = "title_UNIQUE", columnNames = {"title"})})
 @Entity
 public class PeriodicalEntity {
@@ -63,245 +60,111 @@ public class PeriodicalEntity {
     @Column(name = "images", nullable = false, length = 500)
     private String images;
 
-    /**
-     * The Receipt entities.
-     */
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "periodical")
     Set<PeriodicalHasReceiptEntity> receiptEntities;
 
-    /**
-     * The Periodical has subject.
-     */
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "periodical")
     Set<PeriodicalHasSubjectEntity> periodicalHasSubject;
 
-    /**
-     * Instantiates a new Periodical entity.
-     *
-     * @param sellId the sell id
-     */
     public PeriodicalEntity(Integer sellId) {
         this.sellId = sellId;
     }
 
-    /**
-     * Instantiates a new Periodical entity.
-     */
     public PeriodicalEntity() {
     }
 
-    /**
-     * Gets receipt entities.
-     *
-     * @return the receipt entities
-     */
     public Set<PeriodicalHasReceiptEntity> getReceiptEntities() {
         return receiptEntities;
     }
 
-    /**
-     * Sets receipt entities.
-     *
-     * @param receiptEntities the receipt entities
-     */
     public void setReceiptEntities(Set<PeriodicalHasReceiptEntity> receiptEntities) {
         this.receiptEntities = receiptEntities;
     }
 
-    /**
-     * Gets periodical has subject.
-     *
-     * @return the periodical has subject
-     */
     public Set<PeriodicalHasSubjectEntity> getPeriodicalHasSubject() {
         return periodicalHasSubject;
     }
 
-    /**
-     * Sets periodical has subject.
-     *
-     * @param periodicalHasSubject the periodical has subject
-     */
     public void setPeriodicalHasSubject(Set<PeriodicalHasSubjectEntity> periodicalHasSubject) {
         this.periodicalHasSubject = periodicalHasSubject;
     }
 
-    /**
-     * Gets images.
-     *
-     * @return the images
-     */
     public String getImages() {
         return images;
     }
 
-    /**
-     * Sets images.
-     *
-     * @param images the images
-     */
     public void setImages(String images) {
         this.images = images;
     }
 
-    /**
-     * Gets publisher.
-     *
-     * @return the publisher
-     */
     public PublisherEntity getPublisher() {
         return publisher;
     }
 
-    /**
-     * Sets publisher.
-     *
-     * @param publisher the publisher
-     */
     public void setPublisher(PublisherEntity publisher) {
         this.publisher = publisher;
     }
 
-    /**
-     * Gets rating.
-     *
-     * @return the rating
-     */
     public Double getRating() {
         return rating;
     }
 
-    /**
-     * Sets rating.
-     *
-     * @param rating the rating
-     */
     public void setRating(Double rating) {
         this.rating = rating;
     }
 
-    /**
-     * Gets description.
-     *
-     * @return the description
-     */
     public String getDescription() {
         return description;
     }
 
-    /**
-     * Sets description.
-     *
-     * @param description the description
-     */
     public void setDescription(String description) {
         this.description = description;
     }
 
-    /**
-     * Gets price per month.
-     *
-     * @return the price per month
-     */
     public BigDecimal getPricePerMonth() {
         return pricePerMonth;
     }
 
-    /**
-     * Sets price per month.
-     *
-     * @param pricePerMonth the price per month
-     */
     public void setPricePerMonth(BigDecimal pricePerMonth) {
         this.pricePerMonth = pricePerMonth;
     }
 
-    /**
-     * Gets percentage of advertising.
-     *
-     * @return the percentage of advertising
-     */
     public Integer getPercentageOfAdvertising() {
         return percentageOfAdvertising;
     }
 
-    /**
-     * Sets percentage of advertising.
-     *
-     * @param percentageOfAdvertising the percentage of advertising
-     */
     public void setPercentageOfAdvertising(Integer percentageOfAdvertising) {
         this.percentageOfAdvertising = percentageOfAdvertising;
     }
 
-    /**
-     * Gets periodicity per year.
-     *
-     * @return the periodicity per year
-     */
     public Integer getPeriodicityPerYear() {
         return periodicityPerYear;
     }
 
-    /**
-     * Sets periodicity per year.
-     *
-     * @param periodicityPerYear the periodicity per year
-     */
     public void setPeriodicityPerYear(Integer periodicityPerYear) {
         this.periodicityPerYear = periodicityPerYear;
     }
 
-    /**
-     * Gets number of pages.
-     *
-     * @return the number of pages
-     */
     public Integer getNumberOfPages() {
         return numberOfPages;
     }
 
-    /**
-     * Sets number of pages.
-     *
-     * @param numberOfPages the number of pages
-     */
     public void setNumberOfPages(Integer numberOfPages) {
         this.numberOfPages = numberOfPages;
     }
 
-    /**
-     * Gets title.
-     *
-     * @return the title
-     */
     public String getTitle() {
         return title;
     }
 
-    /**
-     * Sets title.
-     *
-     * @param title the title
-     */
     public void setTitle(String title) {
         this.title = title;
     }
 
-    /**
-     * Gets sell id.
-     *
-     * @return the sell id
-     */
     public Integer getSellId() {
         return sellId;
     }
 
-    /**
-     * Sets sell id.
-     *
-     * @param sellId the sell id
-     */
     public void setSellId(Integer sellId) {
         this.sellId = sellId;
     }

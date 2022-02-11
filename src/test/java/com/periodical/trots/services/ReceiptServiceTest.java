@@ -21,11 +21,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class ReceiptServiceTest {
 
-    @InjectMocks
-    private ReceiptService testInstance;
-
     @Mock
     private ReceiptRepository receiptRepository;
+
+    @InjectMocks
+    private ReceiptService testInstance;
 
     @Test
     public void shouldGetAllReceiptForAdmin() {

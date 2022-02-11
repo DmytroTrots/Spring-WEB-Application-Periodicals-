@@ -11,10 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
-/**
- * The interface Periodical has subject repository.
- */
 @Repository
 public interface PeriodicalHasSubjectRepository extends JpaRepository<PeriodicalHasSubjectEntity, Integer> {
 

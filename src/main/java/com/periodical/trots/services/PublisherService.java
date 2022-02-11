@@ -2,7 +2,6 @@ package com.periodical.trots.services;
 
 import com.periodical.trots.entities.PublisherEntity;
 import com.periodical.trots.repositories.PublisherRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,12 @@ import java.util.List;
  */
 @Service
 public class PublisherService {
-    @Autowired
-    private PublisherRepository publisherRepository;
+
+    private final PublisherRepository publisherRepository;
+
+    public PublisherService(PublisherRepository publisherRepository) {
+        this.publisherRepository = publisherRepository;
+    }
 
     /**
      * Find all list.

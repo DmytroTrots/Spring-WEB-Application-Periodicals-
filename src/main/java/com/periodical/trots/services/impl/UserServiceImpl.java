@@ -1,7 +1,8 @@
-package com.periodical.trots.services;
+package com.periodical.trots.services.impl;
 
 import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.repositories.UserRepository;
+import com.periodical.trots.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

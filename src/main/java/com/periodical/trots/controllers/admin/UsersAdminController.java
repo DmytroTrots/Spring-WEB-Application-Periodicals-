@@ -1,7 +1,7 @@
 package com.periodical.trots.controllers.admin;
 
 import com.periodical.trots.entities.UserEntity;
-import com.periodical.trots.services.UserServiceImpl;
+import com.periodical.trots.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -19,8 +19,11 @@ import javax.validation.Valid;
 @Controller
 public class UsersAdminController {
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
+
+    public UsersAdminController(UserServiceImpl userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/users")
     public String allUsersPageAdmin(Model model){

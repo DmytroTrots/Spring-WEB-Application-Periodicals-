@@ -1,4 +1,4 @@
-package com.periodical.trots.services;
+package com.periodical.trots.services.impl;
 
 import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.repositories.UserRepository;

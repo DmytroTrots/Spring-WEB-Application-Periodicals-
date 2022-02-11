@@ -2,6 +2,7 @@ package com.periodical.trots.services;
 
 import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.repositories.UserRepository;
+import com.periodical.trots.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,8 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
@@ -147,13 +147,16 @@ public class UserServiceImplTest {
         assertEquals(expectedUser, actualUser);
     }
 
-//    @Test
-//    public void shouldDeleteUserById() {
-//        UserEntity user = mock(UserEntity.class);
-//
-//        boolean deleteUser = testInstance.deleteUserById(user.getId());
-//
-//        Assert.assertTrue(deleteUser);
-//    }
 
+    @Test
+    public void shouldDeleteUserById() {
+        UserEntity user = new UserEntity();
+        user.setId(1);
+//        use when spy
+//        doNothing().when(userRepository).deleteById(1);
+
+        boolean deleteUser = testInstance.deleteUserById(user.getId());
+
+        assertTrue(deleteUser);
+    }
 }

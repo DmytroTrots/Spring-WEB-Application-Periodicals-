@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface ReceiptRepository extends JpaRepository<ReceiptEntity, Integer> {
     /**
-     * Find all by status status name and create time list.
+     * Find all by status name and create time list.
      *
      * @param status_statusName the status status name
      * @param createTime        the create time
