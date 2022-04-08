@@ -11,7 +11,7 @@ import java.util.Properties;
 public class Mailer {
 
     final static String user="periodicalsiteepam@gmail.com";//change accordingly
-    final static String pass="passwordEPAM";
+    final static String pass=System.getenv("MAIL_PASSWORD");
     public static final String ORDER_REPORT_PDF = "C:\\Users\\Dima\\Desktop\\periodicalsSpring\\src\\main\\resources\\static\\order_report.pdf";
 
     public static void send(String to, String subject, String message) throws MessagingException {
