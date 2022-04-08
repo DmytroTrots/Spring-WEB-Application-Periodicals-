@@ -2,7 +2,6 @@ package com.periodical.trots.services;
 
 import com.periodical.trots.entities.PeriodicalHasSubjectEntity;
 import com.periodical.trots.repositories.PeriodicalHasSubjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -11,8 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class PeriodicalHasSubjectService {
 
-    @Autowired
-    private PeriodicalHasSubjectRepository periodicalHasSubjectRepository;
+    private final PeriodicalHasSubjectRepository periodicalHasSubjectRepository;
+
+    public PeriodicalHasSubjectService(PeriodicalHasSubjectRepository periodicalHasSubjectRepository) {
+        this.periodicalHasSubjectRepository = periodicalHasSubjectRepository;
+    }
 
     public boolean save(PeriodicalHasSubjectEntity periodicalHasSubject) {
         periodicalHasSubjectRepository.save(periodicalHasSubject);
