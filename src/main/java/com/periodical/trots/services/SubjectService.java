@@ -2,7 +2,6 @@ package com.periodical.trots.services;
 
 import com.periodical.trots.entities.SubjectEntity;
 import com.periodical.trots.repositories.SubjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,8 +9,11 @@ import java.util.List;
 @Service
 public class SubjectService {
 
-    @Autowired
-    private SubjectRepository subjectRepository;
+    private final SubjectRepository subjectRepository;
+
+    public SubjectService(SubjectRepository subjectRepository) {
+        this.subjectRepository = subjectRepository;
+    }
 
     public List<SubjectEntity> findAll(){
         return subjectRepository.findAll();
