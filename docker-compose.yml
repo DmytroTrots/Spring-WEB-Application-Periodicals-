@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  java-mysql:
+    image: mysql
+    command: mysqld --sql_mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
+    environment:
+      - MYSQL_ROOT_PASSWORD=DimaDima272727
+      - MYSQL_DATABASE=dbperiodicalsspring
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://java-mysql:3306/dbperiodicalsspring?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    depends_on:
+      - java-mysql
