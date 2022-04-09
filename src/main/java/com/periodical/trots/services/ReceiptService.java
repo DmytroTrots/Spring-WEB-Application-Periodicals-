@@ -3,7 +3,6 @@ package com.periodical.trots.services;
 import com.periodical.trots.entities.ReceiptEntity;
 import com.periodical.trots.entities.StatusEntity;
 import com.periodical.trots.repositories.ReceiptRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +12,11 @@ import java.util.List;
 @Service
 public class ReceiptService {
 
-    @Autowired
-    private ReceiptRepository receiptRepository;
+    private final ReceiptRepository receiptRepository;
+
+    public ReceiptService(ReceiptRepository receiptRepository) {
+        this.receiptRepository = receiptRepository;
+    }
 
     public List<ReceiptEntity> getAllReceiptForAdmin(){
         return receiptRepository.findAll(Sort.by(Sort.Direction.ASC, "status"));
