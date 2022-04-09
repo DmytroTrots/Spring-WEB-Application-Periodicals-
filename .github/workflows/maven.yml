@@ -30,6 +30,6 @@ jobs:
             image: dmytrotrots/springboot-periodicals-image
             tags: latest
             registry: docker.io
-            dockerfile: docker-compose.yml
+            dockerfile: Dockerfile
             username: ${{ secrets.DOCKER_USERNAME }}
             password: ${{ secrets.DOCKER_PASSWORD }}
