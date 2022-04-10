@@ -45,7 +45,6 @@ jobs:
           username: ${{ secrets.USERNAME_SERVER }}
           passphrase: ${{ secrets.PASSWORD_SERVER }}
           key: ${{ secrets.SSH_KEY_SERVER }}
-          envs: IMAGE_NAME,REGISTRY,GITHUB_SHA,,CONTAINER_NAME
           script:
             whoami
 
