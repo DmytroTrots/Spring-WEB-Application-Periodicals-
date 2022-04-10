@@ -43,7 +43,7 @@ jobs:
         with:
           host: ${{ secrets.HOST_SERVER }}
           username: ${{ secrets.USERNAME_SERVER }}
-          password: ${{ secrets.PASSWORD_SERVER }}
+          passphrase: ${{ secrets.PASSWORD_SERVER }}
           key: ${{ secrets.SSH_KEY_SERVER }}
           envs: IMAGE_NAME,REGISTRY,GITHUB_SHA,,CONTAINER_NAME
           script:
