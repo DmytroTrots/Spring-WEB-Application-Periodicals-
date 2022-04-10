@@ -2,7 +2,6 @@ package com.periodical.trots.utils;
 
 import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.services.impl.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -14,8 +13,11 @@ import java.io.IOException;
 @Component
 public class BanFilter implements Filter {
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
+
+    public BanFilter(UserServiceImpl userService) {
+        this.userService = userService;
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
