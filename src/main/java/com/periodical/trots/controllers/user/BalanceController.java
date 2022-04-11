@@ -3,7 +3,6 @@ package com.periodical.trots.controllers.user;
 import com.periodical.trots.services.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +35,7 @@ public class BalanceController {
         Double updatedBalance = userService.topUpBalance(balance, currentBalance, userId);
         String lang = String.valueOf(LocaleContextHolder.getLocale());
         if (lang.equals("en_US") || lang.equals("en")) {
-            redirectAttributes.addFlashAttribute("ex", "Balance updated");
+            redirectAttributes.addFlashAttribute("ex", "Balance");
         }else{
             redirectAttributes.addFlashAttribute("ex", "Баланс поповнено");
         }
