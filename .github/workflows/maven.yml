@@ -45,5 +45,6 @@ jobs:
           passphrase: ${{ secrets.PASSWORD_SERVER }}
           key: ${{ secrets.SSH_KEY_SERVER }}
           script:
+            cd Spring-WEB-Application-Periodicals-
             docker-compose up -d
 
