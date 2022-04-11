@@ -42,7 +42,7 @@ public class UserController {
         }
         model.addAttribute("userForm", new UserEntity());
 
-        return "UserRegistrationPage";
+        return "LoginPage";
     }
 
     @PostMapping("/registration")
