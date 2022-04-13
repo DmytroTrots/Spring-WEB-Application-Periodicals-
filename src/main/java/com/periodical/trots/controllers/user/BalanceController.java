@@ -35,7 +35,7 @@ public class BalanceController {
         Double updatedBalance = userService.topUpBalance(balance, currentBalance, userId);
         String lang = String.valueOf(LocaleContextHolder.getLocale());
         if (lang.equals("en_US") || lang.equals("en")) {
-            redirectAttributes.addFlashAttribute("ex", "Balance u");
+            redirectAttributes.addFlashAttribute("ex", "Balance update");
         }else{
             redirectAttributes.addFlashAttribute("ex", "Баланс поповнено");
         }
