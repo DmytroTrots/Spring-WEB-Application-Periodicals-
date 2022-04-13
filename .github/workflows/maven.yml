@@ -12,7 +12,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
@@ -40,6 +39,8 @@ jobs:
           tags: dmytrotrots/springboot-periodicals-image:latest
 
   deploy:
+    needs:
+      - build
     runs-on: ubuntu-latest
 
     steps:
@@ -52,5 +53,6 @@ jobs:
           key: ${{ secrets.SSH_KEY_SERVER }}
           script:
             cd Spring-WEB-Application-Periodicals-;
+            docker pull dmytrotrots/springboot-periodicals-image;
             docker-compose up -d
 
