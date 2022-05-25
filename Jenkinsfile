@@ -22,7 +22,8 @@ pipeline {
         }
         stage('Login to docker') {
             steps {
-        		bat 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
+                bat 'docker logout'
+        		bat 'docker login -u dmytrotrots -p DimaDima272727'
         	}
         }
         stage('Push to docker hub') {
