@@ -22,13 +22,18 @@ pipeline {
         }
         stage('Login to docker') {
             steps {
-        		bat 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+        		bat 'docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
         	}
         }
         stage('Push to docker hub') {
             steps {
         	    bat 'docker push dmytrotrots/springboot-periodicals-image:latest'
         	}
+        }
+        stage('Run docker-compose') {
+            steps {
+                bat 'docker-compose up -d'
+            }
         }
     }
 }
