@@ -1,4 +1,4 @@
-version: '3'
+version: 3.8
 
 services:
   java-mysql:
@@ -7,6 +7,10 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=DimaDima272727
       - MYSQL_DATABASE=dbperiodicalsspring
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
 
   app:
     image: dmytrotrots/springboot-periodicals-image
@@ -15,4 +19,5 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://java-mysql:3306/dbperiodicalsspring?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
     depends_on:
-      - java-mysql
+      java-mysql:
+        condition: service_healthy
