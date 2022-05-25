@@ -13,7 +13,7 @@ services:
   app:
     image: dmytrotrots/springboot-periodicals-image
     ports:
-      - "5000:5000"
+      - "8083:8888"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://java-mysql:3306/dbperiodicalsspring?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
     depends_on:
