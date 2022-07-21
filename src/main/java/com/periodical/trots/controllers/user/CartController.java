@@ -1,11 +1,13 @@
 package com.periodical.trots.controllers.user;
 
 import com.periodical.trots.entities.*;
-import com.periodical.trots.services.*;
+import com.periodical.trots.services.PeriodicalHasReceiptService;
+import com.periodical.trots.services.PeriodicalService;
+import com.periodical.trots.services.ReceiptService;
+import com.periodical.trots.services.StatusService;
 import com.periodical.trots.services.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,12 +47,12 @@ public class CartController {
     @PostMapping("/order-all")
     public String orderAllFromCart(RedirectAttributes redirectAttributes, HttpServletRequest req, @RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("email") String email, @RequestParam("telephone") String telephone, @RequestParam("address") String address) {
         Integer id = (Integer) req.getSession().getAttribute("ID");
-        Double actualBalance = (Double) req.getSession().getAttribute("BALANCE");
-        Double totalPrice = (Double) req.getSession().getAttribute("totalPrice");
+        BigDecimal actualBalance = (BigDecimal) req.getSession().getAttribute("BALANCE");
+        BigDecimal totalPrice = (BigDecimal) req.getSession().getAttribute("totalPrice");
         List<Cart> cart_list = (List<Cart>) req.getSession().getAttribute("cart-list");
         String lang = String.valueOf(LocaleContextHolder.getLocale());
 
-        if (cart_list != null && id != null && actualBalance > totalPrice) {
+        if (cart_list != null && id != null && actualBalance.compareTo(totalPrice) > 0) {
             UserEntity user = (UserEntity) req.getSession().getAttribute("USER");
             ReceiptEntity receiptEntity = new ReceiptEntity();
             StatusEntity status = statusService.getStatusById(1);
@@ -70,13 +72,13 @@ public class CartController {
                 periodicalHasReceipt.setPeriodical(c.getPeriodical());
                 periodicalHasReceipt.setId(periodicalHasReceiptEntityId);
                 BigDecimal pricePerMonth = c.getPeriodical().getPricePerMonth();
-                Double fullPrice = pricePerMonth.doubleValue() * c.getMonths();
-                periodicalHasReceipt.setPricePerMonth(BigDecimal.valueOf(fullPrice));
+                BigDecimal fullPrice = pricePerMonth.multiply(BigDecimal.valueOf(c.getMonths()));
+                periodicalHasReceipt.setPricePerMonth(fullPrice);
                 periodicalHasReceipt.setNumberOfMonth(c.getMonths());
 
                 periodicalHasReceiptService.saveOrder(periodicalHasReceipt);
             }
-            actualBalance = actualBalance - totalPrice;
+            actualBalance = actualBalance.subtract(totalPrice);
             userService.updateBalanceAfterPayment(user.getUsername(), actualBalance);
             req.getSession().setAttribute("BALANCE", actualBalance);
             cart_list.clear();
@@ -92,13 +94,13 @@ public class CartController {
     public String cartGetMethod(HttpServletRequest request, Model model) {
         List<Cart> cart_list = (List<Cart>) request.getSession().getAttribute("cart-list");
         UserEntity user = (UserEntity) request.getSession().getAttribute("USER");
-        double totalPrice = 0;
+        BigDecimal totalPrice = BigDecimal.ZERO;
         if (cart_list != null) {
             model.addAttribute("cartPeriodical", cart_list);
-            BigDecimal pricePer = null;
+            BigDecimal pricePer;
             for (Cart c : cart_list) {
                 pricePer = c.getPeriodical().getPricePerMonth();
-                totalPrice = totalPrice + pricePer.doubleValue() * c.getMonths();
+                totalPrice = totalPrice.add(pricePer).multiply(BigDecimal.valueOf(c.getMonths()));
             }
             request.getSession().setAttribute("totalPrice", totalPrice);
         }
@@ -118,7 +120,7 @@ public class CartController {
                         month++;
                         c.setMonths(month);
                         BigDecimal price = c.getPeriodical().getPricePerMonth();
-                        c.setTotalPrice(price.doubleValue() * c.getMonths());
+                        c.setTotalPrice(price.multiply(BigDecimal.valueOf(c.getMonths())));
                         break;
                     }
                 }
@@ -131,7 +133,7 @@ public class CartController {
                         month--;
                         c.setMonths(month);
                         BigDecimal price = c.getPeriodical().getPricePerMonth();
-                        c.setTotalPrice(price.doubleValue() * c.getMonths());
+                        c.setTotalPrice(price.multiply(BigDecimal.valueOf(c.getMonths())));
                         break;
                     }
                 }
@@ -170,8 +172,7 @@ public class CartController {
         PeriodicalEntity periodical = periodicalService.getPeriodicalById(periodicalId);
         cartObject.setPeriodical(periodical);
         BigDecimal pricePerMonth = periodical.getPricePerMonth();
-        Double totalPrice = pricePerMonth.doubleValue();
-        cartObject.setTotalPrice(totalPrice);
+        cartObject.setTotalPrice(pricePerMonth);
         cartObject.setMonths(1);
 
         List<Cart> cart_list = (List<Cart>) request.getSession().getAttribute("cart-list");
@@ -202,16 +203,14 @@ public class CartController {
     @PostMapping("/buy-now")
     public String buyNow(RedirectAttributes redirectAttributes, @RequestParam("periodicalId") Integer periodicalId, @RequestParam("page") Integer page, HttpServletRequest request) {
         UserEntity user = (UserEntity) request.getSession().getAttribute("USER");
-        Double actualBalance = (Double) request.getSession().getAttribute("BALANCE");
+        BigDecimal actualBalance = (BigDecimal) request.getSession().getAttribute("BALANCE");
         String lang = String.valueOf(LocaleContextHolder.getLocale());
         PeriodicalEntity periodical = periodicalService.getPeriodicalById(periodicalId);
         BigDecimal pricePerMonth = periodical.getPricePerMonth();
-        Double totalPrice = pricePerMonth.doubleValue();
-        if (actualBalance < totalPrice) {
+        if (actualBalance.compareTo(pricePerMonth) < 0) {
             langEx(redirectAttributes, lang, "Periodical wasn't ordered, check balance", "Видання не було замовлено, перевірте баланс");
             return "redirect:/shop?page=" + page;
         } else {
-
             ReceiptEntity receiptEntity = new ReceiptEntity();
             StatusEntity status = statusService.getStatusById(1);
             receiptEntity.setStatus(status);
@@ -234,8 +233,7 @@ public class CartController {
             periodicalHasReceipt.setPricePerMonth(periodical.getPricePerMonth());
             periodicalHasReceipt.setNumberOfMonth(1);
 
-
-            actualBalance = actualBalance - totalPrice;
+            actualBalance = actualBalance.subtract(pricePerMonth);
             userService.updateBalanceAfterPayment(user.getUsername(), actualBalance);
             request.getSession().setAttribute("BALANCE", actualBalance);
 

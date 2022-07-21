@@ -8,7 +8,6 @@ import com.periodical.trots.services.SubjectService;
 import com.periodical.trots.services.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -90,8 +89,7 @@ public class ShopController {
         if (userId != null) {
             UserEntity user = userService.findUserById(userId);
             BigDecimal balance = user.getBalance();
-            Double actualBalance = balance.doubleValue();
-            request.getSession().setAttribute("BALANCE", actualBalance);
+            request.getSession().setAttribute("BALANCE", balance);
         }
 
         model.addAttribute("subjects", subjectService.findAll());

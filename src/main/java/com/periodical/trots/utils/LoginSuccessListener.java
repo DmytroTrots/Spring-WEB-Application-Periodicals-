@@ -4,7 +4,6 @@ import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.services.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.stereotype.Component;
@@ -17,11 +16,14 @@ public class LoginSuccessListener implements ApplicationListener<AuthenticationS
 
     private static final Logger logger = LoggerFactory.getLogger(LoginSuccessListener.class);
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
-    @Autowired
-    private HttpServletRequest request;
+    private final HttpServletRequest request;
+
+    public LoginSuccessListener(UserServiceImpl userService, HttpServletRequest request) {
+        this.userService = userService;
+        this.request = request;
+    }
 
     @Override
     public void onApplicationEvent(AuthenticationSuccessEvent evt) {

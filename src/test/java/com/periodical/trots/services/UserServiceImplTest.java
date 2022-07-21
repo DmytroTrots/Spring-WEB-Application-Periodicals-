@@ -96,9 +96,9 @@ public class UserServiceImplTest {
         when(userRepository.getById(user.getId())).thenReturn(user);
         when(userRepository.save(user)).thenReturn(user);
 
-        Double actualBalance = testInstance.topUpBalance(200.0, user.getBalance().doubleValue(), user.getId());
+        BigDecimal actualBalance = testInstance.topUpBalance(BigDecimal.valueOf(200), user.getBalance(), user.getId());
 
-        assertEquals(400, actualBalance, 0.01);
+        assertEquals(400, actualBalance.doubleValue(), 0.01);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class UserServiceImplTest {
         when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
         when(userRepository.save(user)).thenReturn(user);
 
-        boolean isUpdated = testInstance.updateBalanceAfterPayment(user.getUsername(), user.getBalance().doubleValue());
+        boolean isUpdated = testInstance.updateBalanceAfterPayment(user.getUsername(), user.getBalance());
 
         assertTrue(isUpdated);
     }
@@ -152,8 +152,6 @@ public class UserServiceImplTest {
     public void shouldDeleteUserById() {
         UserEntity user = new UserEntity();
         user.setId(1);
-//        use when spy
-//        doNothing().when(userRepository).deleteById(1);
 
         boolean deleteUser = testInstance.deleteUserById(user.getId());
 

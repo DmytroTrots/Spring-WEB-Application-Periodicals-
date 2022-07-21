@@ -43,14 +43,14 @@ public class OrdersAdminController {
 
         BigDecimal priceStart;
 
-        List<Double> prices = new ArrayList<>();
+        List<BigDecimal> prices = new ArrayList<>();
 
         for (int i = 0; i< list.size(); i++) {
-            Double priceFinal = 0.0;
+            BigDecimal priceFinal = BigDecimal.ZERO;
             List<PeriodicalHasReceiptEntity> listOfPerHasEnt = new ArrayList<>(list.get(i).getReceiptEntities());
             for (PeriodicalHasReceiptEntity r : listOfPerHasEnt){
                 priceStart = r.getPricePerMonth();
-                priceFinal = priceFinal +priceStart.doubleValue();
+                priceFinal = priceFinal.add(priceStart);
             }
             prices.add(priceFinal);
         }
@@ -71,16 +71,15 @@ public class OrdersAdminController {
     public String discardOrderByAdmin(RedirectAttributes redirectAttributes, @RequestParam("receiptId") Integer receiptId) {
         ReceiptEntity receipt = receiptService.getReceiptById(receiptId);
         BigDecimal balanceOfUser = receipt.getUser().getBalance();
-        Double actualBalance = balanceOfUser.doubleValue();
         List<PeriodicalHasReceiptEntity> listOfPerHasEnt = new ArrayList<>(receipt.getReceiptEntities());
         BigDecimal priceStart;
-        Double priceFinal = 0.0;
+        BigDecimal priceFinal = BigDecimal.ZERO;
         for (PeriodicalHasReceiptEntity r : listOfPerHasEnt){
             priceStart = r.getPricePerMonth();
-            priceFinal = priceFinal +priceStart.doubleValue();
+            priceFinal = priceFinal.add(priceStart);
         }
-        actualBalance = actualBalance + priceFinal;
-        userService.updateBalanceAfterPayment(receipt.getUser().getUsername(), actualBalance);
+        balanceOfUser = balanceOfUser.add(priceFinal);
+        userService.updateBalanceAfterPayment(receipt.getUser().getUsername(), balanceOfUser);
 
         receiptService.discardOrderByAdmin(receiptId, statusService.getStatusById(2));
 

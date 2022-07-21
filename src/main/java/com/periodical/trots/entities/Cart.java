@@ -1,17 +1,19 @@
 package com.periodical.trots.entities;
 
+import java.math.BigDecimal;
+
 public class Cart {
     private Integer months;
 
     private PeriodicalEntity periodical;
 
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
-    public Double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Double totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 

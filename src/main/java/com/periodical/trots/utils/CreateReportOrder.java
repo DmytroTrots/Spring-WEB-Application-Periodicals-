@@ -57,14 +57,14 @@ public class CreateReportOrder{
 
                 BigDecimal priceStart;
 
-                List<Double> prices = new ArrayList<>();
+                List<BigDecimal> prices = new ArrayList<>();
                 List<String> periodicals = new ArrayList<>();
                 StringBuffer periodical;
 
                 List<PeriodicalHasReceiptEntity> listOfPerHasEnt;
 
                 for (int i = 0; i< list.size(); i++) {
-                    Double priceFinal = 0.0;
+                    BigDecimal priceFinal = BigDecimal.ZERO;
                     listOfPerHasEnt = new ArrayList<>(list.get(i).getReceiptEntities());
                     periodical = new StringBuffer();
                     for (PeriodicalHasReceiptEntity r : listOfPerHasEnt){
@@ -74,7 +74,7 @@ public class CreateReportOrder{
                             periodical.append(r.getPeriodical().getSellId()).append(", ");
                         }
                         priceStart = r.getPricePerMonth();
-                        priceFinal = priceFinal +priceStart.doubleValue();
+                        priceFinal = priceFinal.add(priceStart);
                     }
                     periodicals.add(periodical.toString());
                     prices.add(priceFinal);

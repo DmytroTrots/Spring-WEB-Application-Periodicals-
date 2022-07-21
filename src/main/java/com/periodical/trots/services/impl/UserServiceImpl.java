@@ -3,7 +3,6 @@ package com.periodical.trots.services.impl;
 import com.periodical.trots.entities.UserEntity;
 import com.periodical.trots.repositories.UserRepository;
 import com.periodical.trots.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +15,20 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @Override
     public boolean save(UserEntity user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRole("customer");
-        user.setBalance(BigDecimal.valueOf(0));
+        user.setBalance(BigDecimal.ZERO);
         userRepository.save(user);
         return true;
     }
@@ -53,7 +55,7 @@ public class UserServiceImpl implements UserService {
      */
     public boolean saveUserByAdmin(UserEntity user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setBalance(BigDecimal.valueOf(0));
+        user.setBalance(BigDecimal.ZERO);
         userRepository.save(user);
         return true;
     }
@@ -94,10 +96,10 @@ public class UserServiceImpl implements UserService {
      * @param userId         the user id
      * @return the double
      */
-    public Double topUpBalance(Double balance, Double currentBalance, Integer userId) {
+    public BigDecimal topUpBalance(BigDecimal balance, BigDecimal currentBalance, Integer userId) {
         UserEntity user = userRepository.getById(userId);
-        Double updatedBalance = balance + currentBalance;
-        user.setBalance(BigDecimal.valueOf(updatedBalance));
+        BigDecimal updatedBalance = balance.add(currentBalance);
+        user.setBalance(updatedBalance);
         userRepository.save(user);
         return updatedBalance;
     }
@@ -109,9 +111,9 @@ public class UserServiceImpl implements UserService {
      * @param actualBalance the actual balance
      * @return the boolean
      */
-    public boolean updateBalanceAfterPayment(String username, Double actualBalance) {
+    public boolean updateBalanceAfterPayment(String username, BigDecimal actualBalance) {
         UserEntity user = userRepository.findByUsername(username);
-        user.setBalance(BigDecimal.valueOf(actualBalance));
+        user.setBalance(actualBalance);
         userRepository.save(user);
         return true;
     }

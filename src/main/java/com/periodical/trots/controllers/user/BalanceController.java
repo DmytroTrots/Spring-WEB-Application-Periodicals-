@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 
 @Controller
 public class BalanceController {
@@ -29,10 +30,10 @@ public class BalanceController {
     }
 
     @PostMapping("/top-up")
-    public String topUpBalancePost(RedirectAttributes redirectAttributes, @RequestParam("balance") Double balance, HttpServletRequest request){
-        Double currentBalance = (Double) request.getSession().getAttribute("BALANCE");
+    public String topUpBalancePost(RedirectAttributes redirectAttributes, @RequestParam("balance") BigDecimal balance, HttpServletRequest request){
+        BigDecimal currentBalance = (BigDecimal) request.getSession().getAttribute("BALANCE");
         Integer userId = (Integer) request.getSession().getAttribute("ID");
-        Double updatedBalance = userService.topUpBalance(balance, currentBalance, userId);
+        BigDecimal updatedBalance = userService.topUpBalance(balance, currentBalance, userId);
         String lang = String.valueOf(LocaleContextHolder.getLocale());
         if (lang.equals("en_US") || lang.equals("en")) {
             redirectAttributes.addFlashAttribute("ex", "Balance u");
