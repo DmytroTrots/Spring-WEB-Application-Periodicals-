@@ -9,9 +9,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * The type User service.
- */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -39,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Get all list.
+     * Method returns all users.
      *
      * @return the list
      */
@@ -48,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Save user by admin boolean.
+     * Mathod saves user from admin page.
      *
      * @param user the user
      * @return the boolean
@@ -61,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Ban user by id boolean.
+     * Mathod bans user from admin page.
      *
      * @param userId the user id
      * @return the boolean
@@ -78,7 +75,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Delete user by id boolean.
+     * Method delete user from admin page.
      *
      * @param userId the user id
      * @return the boolean
@@ -89,7 +86,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Top up balance double.
+     * Method updates balance of user after topping up.
      *
      * @param balance        the balance
      * @param currentBalance the current balance
@@ -105,7 +102,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Update balance after payment boolean.
+     * Method updates balance of user after he pay for order.
      *
      * @param username      the username
      * @param actualBalance the actual balance
@@ -119,7 +116,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Find user by id user entity.
+     * Method finds user by ID.
      *
      * @param userId the user id
      * @return the user entity
@@ -129,7 +126,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Find user by email user entity.
+     * Method finds user by email.
      *
      * @param email the email
      * @return the user entity
@@ -139,7 +136,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Find user by telephone user entity.
+     * Method finds user by telephone.
      *
      * @param telephone the telephone
      * @return the user entity
