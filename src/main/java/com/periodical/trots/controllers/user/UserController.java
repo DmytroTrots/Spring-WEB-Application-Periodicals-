@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -46,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String registration(RedirectAttributes redirectAttributes, @Valid @ModelAttribute("userForm") UserEntity userForm, Errors errors, BindingResult bindingResult) {
+    public String registration(RedirectAttributes redirectAttributes, @Valid @ModelAttribute("userForm") UserEntity userForm, Errors errors) {
         String lang = String.valueOf(LocaleContextHolder.getLocale());
         if (errors.hasErrors()) {
             return "UserRegistrationPage";

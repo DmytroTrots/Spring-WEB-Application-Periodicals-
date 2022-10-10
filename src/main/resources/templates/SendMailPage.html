@@ -19,7 +19,7 @@
     </span>
 
 <form class="send-message" th:action="@{/send-message}" method="post">
-    <input type="hidden" name="to" value="headerperiodicalsiteepam@gmail.com"/><br/>
+    <input type="hidden" name="to" value="headerperiodicalsite@gmail.com"/><br/>
     <input type="hidden" name="subject" th:value="${'Username -> ' + session.USER.username +', ID -> '+ session.USER.id}"><br/>
     <label for="message" th:text="#{label.sendMessageLabel}"></label></br>
     <textarea class="textarea" rows="10" cols="70" id="message" name="message"></textarea><br/>

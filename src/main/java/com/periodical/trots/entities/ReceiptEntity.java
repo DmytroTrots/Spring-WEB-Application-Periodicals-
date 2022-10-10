@@ -54,6 +54,18 @@ public class ReceiptEntity {
     public ReceiptEntity() {
     }
 
+    public ReceiptEntity(Integer id, String name, String surname, String adress, String telephoneNumber, StatusEntity status, UserEntity user, String email, Date createTime) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.adress = adress;
+        this.telephoneNumber = telephoneNumber;
+        this.status = status;
+        this.user = user;
+        this.email = email;
+        this.createTime = createTime;
+    }
+
     public Set<PeriodicalHasReceiptEntity> getReceiptEntities() {
         return receiptEntities;
     }

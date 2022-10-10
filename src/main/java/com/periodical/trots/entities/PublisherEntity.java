@@ -25,6 +25,12 @@ public class PublisherEntity {
     public PublisherEntity() {
     }
 
+    public PublisherEntity(Integer id, String name, String telephoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.telephoneNumber = telephoneNumber;
+    }
+
     public String getTelephoneNumber() {
         return telephoneNumber;
     }

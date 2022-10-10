@@ -27,7 +27,7 @@ import java.util.List;
 @Component
 public class CreateReportOrder{
 
-    public static final String ORDER_REPORT_PDF = "C:\\Users\\Dima\\Desktop\\periodicalsSpring\\src\\main\\resources\\static\\order_report.pdf";
+    public static final String ORDER_REPORT_PDF = System.getenv("ORDER_REPORT_PDF");
 
     private static final Logger logger = LoggerFactory.getLogger(LoginSuccessListener.class);
 
@@ -102,7 +102,7 @@ public class CreateReportOrder{
             }
         }
         try {
-            Mailer.sendMailToAdminReportOrders("headerperiodicalsiteepam@gmail.com", "Daily report about orders", "Daily report");
+            Mailer.sendMailToAdminReportOrders("headerperiodicalsite@gmail.com", "Daily report about orders", "Daily report");
         } catch (MessagingException e) {
             e.printStackTrace();
         }

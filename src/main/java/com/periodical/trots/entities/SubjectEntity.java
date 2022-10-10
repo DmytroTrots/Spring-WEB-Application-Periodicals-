@@ -24,6 +24,11 @@ public class SubjectEntity {
     public SubjectEntity() {
     }
 
+    public SubjectEntity(Integer id, String themesOfBooks) {
+        this.id = id;
+        this.themesOfBooks = themesOfBooks;
+    }
+
     public Set<PeriodicalHasSubjectEntity> getPeriodicalHasSubject() {
         return periodicalHasSubject;
     }

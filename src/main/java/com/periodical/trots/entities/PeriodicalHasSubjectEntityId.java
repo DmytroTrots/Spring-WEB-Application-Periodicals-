@@ -4,7 +4,6 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -16,6 +15,14 @@ public class PeriodicalHasSubjectEntityId implements Serializable {
 
     @Column(name = "subject_id", nullable = false)
     private Integer subjectId;
+
+    public PeriodicalHasSubjectEntityId() {
+    }
+
+    public PeriodicalHasSubjectEntityId(Integer periodicalId, Integer subjectId) {
+        this.periodicalId = periodicalId;
+        this.subjectId = subjectId;
+    }
 
     public Integer getSubjectId() {
         return subjectId;

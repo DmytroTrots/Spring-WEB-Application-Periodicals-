@@ -73,6 +73,19 @@ public class PeriodicalEntity {
     public PeriodicalEntity() {
     }
 
+    public PeriodicalEntity(Integer id, String title, Integer numberOfPages, Integer periodicityPerYear, Integer percentageOfAdvertising, BigDecimal pricePerMonth, String description, Double rating, PublisherEntity publisher, String images) {
+        this.sellId = id;
+        this.title = title;
+        this.numberOfPages = numberOfPages;
+        this.periodicityPerYear = periodicityPerYear;
+        this.percentageOfAdvertising = percentageOfAdvertising;
+        this.pricePerMonth = pricePerMonth;
+        this.description = description;
+        this.rating = rating;
+        this.publisher = publisher;
+        this.images = images;
+    }
+
     public Set<PeriodicalHasReceiptEntity> getReceiptEntities() {
         return receiptEntities;
     }

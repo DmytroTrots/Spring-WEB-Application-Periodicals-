@@ -7,7 +7,6 @@ import com.periodical.trots.services.PublisherService;
 import com.periodical.trots.services.SubjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +28,7 @@ public class PeriodicalsAdminController {
 
     private static final Logger logger = LoggerFactory.getLogger(PeriodicalsAdminController.class);
 
-    public static final String IMAGE_PATH = "C:\\Users\\Dima\\Desktop\\periodicalsSpring\\src\\main\\resources\\static\\images\\";
+    public static final String IMAGE_PATH = System.getenv("IMAGE_PATH");
 
     private final PeriodicalService periodicalService;
 
@@ -180,7 +179,7 @@ public class PeriodicalsAdminController {
         try {
             String filename = file.getOriginalFilename();
             periodicalForm.setImages(filename);
-            File path = new File("C:\\Users\\Dima\\Desktop\\periodicalsSpring\\src\\main\\resources\\static\\images\\" + filename);
+            File path = new File(IMAGE_PATH + filename);
             path.createNewFile();
             FileOutputStream output = new FileOutputStream(path);
             output.write(file.getBytes());

@@ -18,6 +18,15 @@ public class PeriodicalHasSubjectEntity {
     @JoinColumn(name = "periodical_id")
     PeriodicalEntity periodical;
 
+    public PeriodicalHasSubjectEntity() {
+    }
+
+    public PeriodicalHasSubjectEntity(PeriodicalHasSubjectEntityId id, SubjectEntity subject, PeriodicalEntity periodical) {
+        this.id = id;
+        this.subject = subject;
+        this.periodical = periodical;
+    }
+
     public SubjectEntity getSubject() {
         return subject;
     }

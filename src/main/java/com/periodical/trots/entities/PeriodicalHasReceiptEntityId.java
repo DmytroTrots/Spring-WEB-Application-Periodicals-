@@ -15,6 +15,14 @@ public class PeriodicalHasReceiptEntityId implements Serializable {
     @Column(name = "receipt_id", nullable = false)
     private Integer receiptId;
 
+    public PeriodicalHasReceiptEntityId() {
+    }
+
+    public PeriodicalHasReceiptEntityId(Integer periodicalSellId, Integer receiptId) {
+        this.periodicalSellId = periodicalSellId;
+        this.receiptId = receiptId;
+    }
+
     public Integer getReceiptId() {
         return receiptId;
     }

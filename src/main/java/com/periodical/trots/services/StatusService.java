@@ -16,4 +16,8 @@ public class StatusService {
     public StatusEntity getStatusById(Integer statusId){
         return statusRepository.getById(statusId);
     }
+
+    public StatusEntity save(StatusEntity status){
+        return statusRepository.save(status);
+    }
 }

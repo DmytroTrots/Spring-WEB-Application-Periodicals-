@@ -22,12 +22,12 @@
     </Appenders>
     <Loggers>
 
-        <Logger name="com.periodical.trots" additivity="false">
+        <Logger name="com.periodical" additivity="false">
             <AppenderRef ref="appLog" />
             <AppenderRef ref="Console" />
         </Logger>
 
-        <Root level="">
+        <Root level="info">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
             <AppenderRef ref="ErrorFile" level="error"/>

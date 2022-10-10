@@ -22,15 +22,10 @@ import java.util.List;
 
 @Controller
 public class OrdersAdminController {
-
     private static final Logger logger = LoggerFactory.getLogger(BalanceController.class);
-
     private final ReceiptService receiptService;
-
     private final StatusService statusService;
-
     private final UserServiceImpl userService;
-
     public OrdersAdminController(ReceiptService receiptService, StatusService statusService, UserServiceImpl userService) {
         this.receiptService = receiptService;
         this.statusService = statusService;

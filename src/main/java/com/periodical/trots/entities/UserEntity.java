@@ -50,7 +50,6 @@ public class UserEntity implements UserDetails{
     private String surname;
 
     @Column(name = "ban_status", length = 45)
-
     private String banStatus;
 
     @Column(name = "balance", columnDefinition="Decimal(9,2) default '0.00'")
@@ -59,11 +58,25 @@ public class UserEntity implements UserDetails{
     @Column(name = "role", length = 45)
     private String role;
 
-
     @NotBlank(message = "Specify this value correctly")
     @Column(name = "address", length = 1024)
     @Length(max = 1024, message = "{error.address}")
     private String address;
+
+    public UserEntity() {
+    }
+
+    public UserEntity(Integer id, String username, String email, String password, String telephone, String name, String surname, String role, String address) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.telephone = telephone;
+        this.name = name;
+        this.surname = surname;
+        this.role = role;
+        this.address = address;
+    }
 
     public String getAddress() {
         return address;

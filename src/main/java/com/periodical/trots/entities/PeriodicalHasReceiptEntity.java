@@ -25,6 +25,15 @@ public class PeriodicalHasReceiptEntity {
     @JoinColumn(name = "periodical_sell_id")
     PeriodicalEntity periodical;
 
+    public PeriodicalHasReceiptEntity() {
+    }
+
+    public PeriodicalHasReceiptEntity(PeriodicalHasReceiptEntityId id, BigDecimal pricePerMonth, Integer numberOfMonth) {
+        this.id = id;
+        this.pricePerMonth = pricePerMonth;
+        this.numberOfMonth = numberOfMonth;
+    }
+
     public ReceiptEntity getmReceipt() {
         return mReceipt;
     }

@@ -15,6 +15,14 @@ public class StatusEntity {
     @Column(name = "status_name", nullable = false)
     private String statusName;
 
+    public StatusEntity(Integer id, String statusName) {
+        this.id = id;
+        this.statusName = statusName;
+    }
+
+    public StatusEntity() {
+    }
+
     public String getStatusName() {
         return statusName;
     }
